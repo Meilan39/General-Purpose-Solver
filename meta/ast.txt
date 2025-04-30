@@ -1,0 +1,68 @@
+file
+└── CNLP
+    ├── CNLP
+    ├── Minimize
+    ├── nonlinear additive
+    │   ├── nonlinear multiplicative |positive|
+    │   │   ├── nonlinear exponential |product|
+    │   │   │   └── rational
+    │   │   │       └── number {2.000000}
+    │   │   └── nonlinear exponential |product|
+    │   │       ├── variable {0.000000}
+    │   │       └── rational
+    │   │           └── number {2.000000}
+    │   ├── nonlinear multiplicative |positive|
+    │   │   ├── nonlinear exponential |product|
+    │   │   │   └── nonlinear parenthesis
+    │   │   │       └── nonlinear additive
+    │   │   │           ├── nonlinear multiplicative |positive|
+    │   │   │           │   └── nonlinear exponential |product|
+    │   │   │           │       ├── irrational
+    │   │   │           │       │   └── e
+    │   │   │           │       └── rational
+    │   │   │           │           └── number {2.000000}
+    │   │   │           └── nonlinear multiplicative |positive|
+    │   │   │               └── nonlinear exponential |product|
+    │   │   │                   └── variable {1.000000}
+    │   │   └── nonlinear exponential |quotient|
+    │   │       └── rational
+    │   │           └── number {4.000000}
+    │   └── nonlinear multiplicative |positive|
+    │       └── nonlinear exponential |product|
+    │           └── log
+    │               ├── number {2.000000}
+    │               └── nonlinear additive
+    │                   └── nonlinear multiplicative |positive|
+    │                       └── nonlinear exponential |product|
+    │                           └── rational
+    │                               └── number {10.000000}
+    ├── Constraint
+    ├── nonlinear constraint
+    │   ├── nonlinear additive
+    │   │   ├── nonlinear multiplicative |positive|
+    │   │   │   └── nonlinear exponential |product|
+    │   │   │       ├── variable {0.000000}
+    │   │   │       └── rational
+    │   │   │           └── number {2.000000}
+    │   │   └── nonlinear multiplicative |negative|
+    │   │       └── nonlinear exponential |product|
+    │   │           ├── variable {1.000000}
+    │   │           └── rational
+    │   │               └── number {2.000000}
+    │   ├── <=
+    │   └── nonlinear additive
+    │       └── nonlinear multiplicative |positive|
+    │           └── nonlinear exponential |product|
+    │               └── rational
+    │                   └── number {1.000000}
+    └── nonlinear constraint
+        ├── nonlinear additive
+        │   └── nonlinear multiplicative |positive|
+        │       └── nonlinear exponential |product|
+        │           └── variable {0.000000}
+        ├── >=
+        └── nonlinear additive
+            └── nonlinear multiplicative |positive|
+                └── nonlinear exponential |product|
+                    └── rational
+                        └── number {2.000000}

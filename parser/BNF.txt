@@ -1,0 +1,86 @@
+<File> ::= <lp> | <ilp> | <unlp> | <cnlp>
+
+<lp> ::= LP 
+         <objective> <linear_expression> ;
+         Constrain {<linear_constraint>}*
+
+<ilp> ::= ILP
+          <objective> <linear_expression> ;
+          Constrain {<linear_constraint>}* 
+          General {<variable_constraint}*
+
+<unlp> ::= UNLP
+           <objective> <nonlinear_expression> ;
+
+<cnlp> ::= CNLP
+           <objective> <nonlinear_expression> ;
+           Constrain {<nonlinear_constraint>}*
+
+/* ---------------------- linear ----------------------- */
+
+<linear_expression> ::= <linear_additive>
+
+<linear_additive> ::= <linear_multiplicative> {<linear_additive_suffix>}*
+<linear_additive_suffix> ::=  + <linear_multiplicative>
+                           |  - <linear_multiplicative>
+
+<linear_multiplicative> ::= {<sign>}? {<real>}? {*}? <variable>
+                          | {<sing>}? <real>
+
+/* --------------------- nonlinear ---------------------- */
+
+<nonlinear_expression> ::= <nonlinear_additive>
+
+<nonlinear_additive> ::= <nonlinear_multiplicative> {<nonlinear_additive_suffix>}*
+<nonlinear_additive_suffix> ::=  + <nonlinear_multiplicative>
+                               | - <nonlinear_multiplicative>
+
+<nonlinear_multiplicative> ::= {<sign>}? <nonlinear_exponential> {<nonlinear_multiplicative_suffix>}*
+<nonlinear_multiplicative_suffix> ::=  * <nonlinear_exponential>
+                                     | / <nonlinear_exponential>
+                                     | <nonlinear_exponential>
+
+<nonlinear_exponential> ::= <nonlinear_primary> {<nonlinear_exponential_suffix>}*
+<nonlinear_exponential_suffix> ::= ^ <nonlinear_primary>
+
+<nonlinear_primary> ::= <real>
+                      | <functions>
+                      | <variable>
+                      | <nonlinear_parenthesis>
+
+<nonlinear_parenthesis> ::= ( <nonlinear_expression> )
+                          | { <nonlinear_expression> }
+
+<functions> ::= <root> | <sqrt> | <log> | <sqrt> | <log> | <ln> | <sin> | <cos> | <tan> 
+
+<root> ::= root ( <number> , <expression> )
+
+<sqrt> ::= sqrt <nonlinear_primary>
+
+<log> ::= log ( <number> , <expression> )
+
+<ln> ::= ln <nonlinear_primary>
+
+<sin> ::= sin <nonlinear_primary>
+
+<cos> ::= cos <nonlinear_primary>
+
+<tan> ::= tan <nonlinear_primary>
+
+/* --------------------- end -------------------- */
+
+<linear_constraint> ::= <linear_expression> <comparison> <linear_expression> ;
+
+<nonlinear_constraint> ::= <nonlinear_expression> <comparsion> <nonlinear_expression> ;
+
+<variable_constraint> ::= <variable> ;
+
+<real_number> ::= <rational> | <irrational>
+
+<rational> ::= <scientific> | <decimal> | <number> | <zero>
+
+<objective> ::= Minimize | Maximize
+
+<irrational> ::= e | pi
+
+<comparison> ::=  = | <= | >= | > | <

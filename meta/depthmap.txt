@@ -1,0 +1,403 @@
+file
+├── LP
+├── ILP
+├── UNLP
+├── CNLP
+│   ├── objective
+│   ├── nonlinear expression
+│   │   ├── nonlinear additive
+│   │   │   ├── nonlinear multiplicative
+│   │   │   │   ├── sign
+│   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   ├── nonlinear additive suffix
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   │   │   │   │   ├── nonlinear expression
+│   │   │   │   │   │   │   │   │   ├── nonlinear additive
+│   │   │   │   │   │   │   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   │   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   │   │   │   │   │   │   ├── nonlinear additive suffix
+│   │   │   │   │   │   │   │   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   │   │   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   │   │   │   │   │   │   ├── nonlinear additive suffix
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   ├── nonlinear additive suffix
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── nonlinear expression
+│   │   │   │   │   │   │   │   │   │   ├── nonlinear additive
+│   │   │   │   │   │   │   │   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   │   │   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   │   │   │   │   │   │   │   ├── nonlinear additive suffix
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   ├── nonlinear additive suffix
+│   ├── nonlinear constraint
+│   │   ├── nonlinear expression
+│   │   │   ├── nonlinear additive
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   ├── nonlinear additive suffix
+│   │   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   ├── nonlinear additive suffix
+│   │   ├── comparison
+│   │   ├── nonlinear expression
+│   │   │   ├── nonlinear additive
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   ├── nonlinear additive suffix
+│   ├── nonlinear constraint
+│   │   ├── nonlinear expression
+│   │   │   ├── nonlinear additive
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   ├── nonlinear additive suffix
+│   │   ├── comparison
+│   │   ├── nonlinear expression
+│   │   │   ├── nonlinear additive
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── nonlinear exponential suffix
+│   │   │   │   │   ├── nonlinear multiplicative suffix
+│   │   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   │   ├── nonlinear parenthesis
+│   │   │   │   ├── nonlinear additive suffix
+│   ├── nonlinear constraint
+│   │   ├── nonlinear expression
+│   │   │   ├── nonlinear additive
+│   │   │   │   ├── nonlinear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── nonlinear exponential
+│   │   │   │   │   │   ├── nonlinear primary
+│   │   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   │   ├── functions
+│   │   │   │   │   │   │   │   ├── root
+│   │   │   │   │   │   │   │   ├── square root
+│   │   │   │   │   │   │   │   ├── log
+│   │   │   │   │   │   │   │   ├── natural log
+│   │   │   │   │   │   │   │   ├── sin
+│   │   │   │   │   │   │   │   ├── cos
+│   │   │   │   │   │   │   │   ├── tan
+│   │   │   │   │   │   │   ├── variable
+│   │   │   │   │   │   │   ├── nonlinear parenthesis

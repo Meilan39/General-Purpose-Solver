@@ -1,0 +1,6 @@
+CNLP
+Minimize 
+    2x1^2 + (e^2 + x2)/4 - log(2, 10);
+Constrain
+    x1^2 - x2^2 <= 1;
+    x1 >= 2;
