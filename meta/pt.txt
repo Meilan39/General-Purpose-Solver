@@ -1,121 +1,74 @@
 file
-└── CNLP
-    ├── CNLP
+└── LP
+    ├── LP
     ├── objective
     │   └── Minimize
-    ├── nonlinear expression
-    │   └── nonlinear additive
-    │       ├── nonlinear multiplicative |positive|
-    │       │   ├── nonlinear exponential |product|
-    │       │   │   └── nonlinear primary
-    │       │   │       └── real number
-    │       │   │           └── rational
-    │       │   │               └── number {2.000000}
-    │       │   └── nonlinear multiplicative suffix
-    │       │       └── nonlinear exponential |product|
-    │       │           ├── nonlinear primary
-    │       │           │   └── variable
-    │       │           │       └── variable {0.000000}
-    │       │           └── nonlinear exponential suffix
-    │       │               └── nonlinear primary
-    │       │                   └── real number
-    │       │                       └── rational
-    │       │                           └── number {2.000000}
-    │       ├── nonlinear additive suffix
-    │       │   └── nonlinear multiplicative |positive|
-    │       │       ├── nonlinear exponential |product|
-    │       │       │   └── nonlinear primary
-    │       │       │       └── nonlinear parenthesis
-    │       │       │           └── nonlinear expression
-    │       │       │               └── nonlinear additive
-    │       │       │                   ├── nonlinear multiplicative |positive|
-    │       │       │                   │   └── nonlinear exponential |product|
-    │       │       │                   │       ├── nonlinear primary
-    │       │       │                   │       │   └── real number
-    │       │       │                   │       │       └── irrational
-    │       │       │                   │       │           └── e
-    │       │       │                   │       └── nonlinear exponential suffix
-    │       │       │                   │           └── nonlinear primary
-    │       │       │                   │               └── real number
-    │       │       │                   │                   └── rational
-    │       │       │                   │                       └── number {2.000000}
-    │       │       │                   └── nonlinear additive suffix
-    │       │       │                       └── nonlinear multiplicative |positive|
-    │       │       │                           └── nonlinear exponential |product|
-    │       │       │                               └── nonlinear primary
-    │       │       │                                   └── variable
-    │       │       │                                       └── variable {1.000000}
-    │       │       └── nonlinear multiplicative suffix
-    │       │           └── nonlinear exponential |quotient|
-    │       │               └── nonlinear primary
-    │       │                   └── real number
-    │       │                       └── rational
-    │       │                           └── number {4.000000}
-    │       └── nonlinear additive suffix
-    │           └── nonlinear multiplicative |positive|
-    │               └── nonlinear exponential |product|
-    │                   └── nonlinear primary
-    │                       └── functions
-    │                           └── log
-    │                               ├── number {2.000000}
-    │                               └── nonlinear expression
-    │                                   └── nonlinear additive
-    │                                       └── nonlinear multiplicative |positive|
-    │                                           └── nonlinear exponential |product|
-    │                                               └── nonlinear primary
-    │                                                   └── real number
-    │                                                       └── rational
-    │                                                           └── number {10.000000}
+    ├── linear expression
+    │   └── linear additive
+    │       ├── linear multiplicative |positive|
+    │       │   └── variable
+    │       │       └── variable {0.000000}
+    │       ├── linear additive suffix
+    │       │   └── linear multiplicative |positive|
+    │       │       ├── real number
+    │       │       │   └── rational
+    │       │       │       └── number {2.000000}
+    │       │       └── variable
+    │       │           └── variable {1.000000}
+    │       └── linear additive suffix
+    │           └── linear multiplicative |positive|
+    │               ├── real number
+    │               │   └── rational
+    │               │       └── number {3.000000}
+    │               └── variable
+    │                   └── variable {2.000000}
     ├── Constraint
-    ├── nonlinear constraint
-    │   ├── nonlinear expression
-    │   │   └── nonlinear additive
-    │   │       ├── nonlinear multiplicative |positive|
-    │   │       │   └── nonlinear exponential |product|
-    │   │       │       ├── nonlinear primary
-    │   │       │       │   └── variable
-    │   │       │       │       └── variable {0.000000}
-    │   │       │       └── nonlinear exponential suffix
-    │   │       │           └── nonlinear primary
-    │   │       │               └── real number
-    │   │       │                   └── rational
-    │   │       │                       └── number {2.000000}
-    │   │       └── nonlinear additive suffix
-    │   │           └── nonlinear multiplicative |negative|
-    │   │               └── nonlinear exponential |product|
-    │   │                   ├── nonlinear primary
-    │   │                   │   └── variable
-    │   │                   │       └── variable {1.000000}
-    │   │                   └── nonlinear exponential suffix
-    │   │                       └── nonlinear primary
-    │   │                           └── real number
-    │   │                               └── rational
-    │   │                                   └── number {2.000000}
+    ├── linear constraint
+    │   ├── linear expression
+    │   │   └── linear additive
+    │   │       └── linear multiplicative |positive|
+    │   │           └── real number
+    │   │               └── rational
+    │   │                   └── zero {0.000000}
     │   ├── comparison
-    │   │   └── <=
-    │   └── nonlinear expression
-    │       └── nonlinear additive
-    │           └── nonlinear multiplicative |positive|
-    │               └── nonlinear exponential |product|
-    │                   └── nonlinear primary
-    │                       └── real number
-    │                           └── rational
-    │                               └── number {1.000000}
-    └── nonlinear constraint
-        ├── nonlinear expression
-        │   └── nonlinear additive
-        │       └── nonlinear multiplicative |positive|
-        │           └── nonlinear exponential |product|
-        │               └── nonlinear primary
-        │                   └── variable
-        │                       └── variable {0.000000}
+    │   │   └── <
+    │   └── linear expression
+    │       └── linear additive
+    │           └── linear multiplicative |positive|
+    │               └── variable
+    │                   └── variable {0.000000}
+    ├── linear constraint
+    │   ├── linear expression
+    │   │   └── linear additive
+    │   │       └── linear multiplicative |positive|
+    │   │           └── variable
+    │   │               └── variable {0.000000}
+    │   ├── comparison
+    │   │   └── <
+    │   └── linear expression
+    │       └── linear additive
+    │           └── linear multiplicative |positive|
+    │               └── real number
+    │                   └── rational
+    │                       └── number {1.000000}
+    └── linear constraint
+        ├── linear expression
+        │   └── linear additive
+        │       ├── linear multiplicative |positive|
+        │       │   └── variable
+        │       │       └── variable {1.000000}
+        │       └── linear additive suffix
+        │           └── linear multiplicative |positive|
+        │               ├── real number
+        │               │   └── rational
+        │               │       └── number {2.000000}
+        │               └── variable
+        │                   └── variable {2.000000}
         ├── comparison
-        │   └── >=
-        └── nonlinear expression
-            └── nonlinear additive
-                └── nonlinear multiplicative |positive|
-                    └── nonlinear exponential |product|
-                        └── nonlinear primary
-                            └── real number
-                                └── rational
-                                    └── number {2.000000}
+        │   └── equal
+        └── linear expression
+            └── linear additive
+                └── linear multiplicative |positive|
+                    └── real number
+                        └── rational
+                            └── number {3.000000}
