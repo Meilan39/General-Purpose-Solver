@@ -1,6 +1,7 @@
 #ifndef TREE
 #define TREE
 
+#include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include "token.hpp"
@@ -32,6 +33,7 @@ int n_emplace(Node* head, int length);
 int n_replace(Node** head, Node* next);
 void n_print(Node* head, const char* path);
 void n_helper(Node* head, int depth, int endge, int state[]);
+double n_get_value(Node* head);
 /* simplify */
 void n_simplify(Node* head);
 void n_compress(Node* head);

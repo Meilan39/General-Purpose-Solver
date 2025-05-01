@@ -21,10 +21,11 @@ int main(int argc, char *argv[]) {
         n_simplify(head);
         // solve
         switch(head->next[0]->type) {
-            case nt_lp: simplex(head, tokens->variables); break;
+            case nt_lp: simplex::simplex(head, tokens->variables, fptr); break;
             case nt_ilp:
             case nt_unlp:
             case nt_cnlp:
+            default: break;
         }
     E:  // close file
         fclose(fptr);

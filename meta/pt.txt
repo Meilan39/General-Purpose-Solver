@@ -1,8 +1,7 @@
 file
 └── LP
-    ├── LP
     ├── objective
-    │   └── Minimize
+    │   └── Maximize
     ├── linear expression
     │   └── linear additive
     │       ├── linear multiplicative |positive|

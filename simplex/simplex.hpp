@@ -1,8 +1,14 @@
 #ifndef SIMPLEX
 #define SIMPLEX
 
+#include "../parser/token.hpp"
+#include "../parser/tree.hpp"
 #include "tableau.hpp"
 
-int simplex(Node* head, Variables* variables, FILE* fptr);
+namespace simplex {
+
+    void simplex(Node* head, Variables* variables, FILE* fptr); 
+
+}
 
 #endif

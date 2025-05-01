@@ -160,6 +160,23 @@ void n_helper(Node* head, int depth, int edge, int state[]) {
     }
 }
 
+double n_get_value(Node* head) {
+    if(head == NULL) return 0;
+    while(head->length == 1) 
+        head = head->next[0];
+    if(head->length != 0) return 0;
+    switch(head->type) {
+        case ct_number: 
+        case ct_decimal: 
+        case ct_zero: 
+        case lt_variable:
+            return head->value;
+        case lt_e:  return M_E;
+        case lt_pi: return M_PI;
+        default: return 0;
+    }
+}
+
 void n_compress_chain(Node* head) {
     if(head->length==0) return;
     for(int i = 0; i < head->length; i++) {

@@ -1,7 +1,6 @@
 file
 └── LP
-    ├── LP
-    ├── Minimize
+    ├── Maximize
     ├── linear additive
     │   ├── linear multiplicative |positive|
     │   │   └── variable {0.000000}
