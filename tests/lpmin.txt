@@ -1,0 +1,7 @@
+LP
+Minimize
+    6x1 + 3x2;
+Constrain
+    x1 + x2 >= 1;
+    2x1 - x2 >= 1;
+    3x2 <= 2;

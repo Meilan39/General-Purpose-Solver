@@ -93,6 +93,7 @@ const l_Map l_map[] = {
     {"Minimize", lt_minimize},
     {"Constrain", lt_constrain},
     {"General", lt_general},
+    {"Solution", lt_solution},
     /* functions */
     {"root", lt_root},
     {"sqrt", lt_sqrt},

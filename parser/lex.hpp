@@ -41,6 +41,7 @@ typedef enum l_Types {
     lt_minimize,
     lt_constrain,
     lt_general,
+    lt_solution,
     /* fuinctions */
     lt_root,
     lt_sqrt,

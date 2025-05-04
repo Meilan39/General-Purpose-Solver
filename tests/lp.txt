@@ -1,5 +1,0 @@
-LP
-Maximize x + 2y + 3*z;
-Constrain
-    0 < x; x < 1;
-    y + 2z = 3;

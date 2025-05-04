@@ -7,7 +7,7 @@
 
 namespace simplex {
 
-    void simplex(Node* head, Variables* variables, FILE* fptr); 
+    void simplex(Node* head, Variables* variables, const char* path, bool verbose); 
 
 }
 

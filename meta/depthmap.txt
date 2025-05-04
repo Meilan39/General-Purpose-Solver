@@ -7,7 +7,6 @@ file
 │   │   │   │   ├── sign
 │   │   │   │   ├── real number
 │   │   │   │   │   ├── rational
-│   │   │   │   │   ├── irrational
 │   │   │   │   ├── variable
 │   │   │   ├── linear additive suffix
 │   │   │   │   ├── linear multiplicative
@@ -30,9 +29,19 @@ file
 │   │   │   │   │   ├── real number
 │   │   │   │   │   │   ├── rational
 │   │   │   │   │   ├── variable
-│   │   │   │   │   ├── sign
-│   │   │   │   │   ├── real number
-│   │   │   │   │   │   ├── rational
+│   │   │   │   ├── linear additive suffix
+│   │   │   │   │   ├── linear multiplicative
+│   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── variable
+│   │   │   │   ├── linear additive suffix
+│   │   │   │   │   ├── linear multiplicative
+│   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   ├── variable
 │   │   │   │   ├── linear additive suffix
 │   │   ├── comparison
 │   │   ├── linear expression
@@ -41,8 +50,10 @@ file
 │   │   │   │   │   ├── sign
 │   │   │   │   │   ├── real number
 │   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   ├── irrational
 │   │   │   │   │   ├── variable
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── real number
+│   │   │   │   │   │   ├── rational
 │   │   │   │   ├── linear additive suffix
 │   ├── linear constraint
 │   │   ├── linear expression
@@ -51,8 +62,19 @@ file
 │   │   │   │   │   ├── sign
 │   │   │   │   │   ├── real number
 │   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   ├── irrational
 │   │   │   │   │   ├── variable
+│   │   │   │   ├── linear additive suffix
+│   │   │   │   │   ├── linear multiplicative
+│   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── variable
+│   │   │   │   ├── linear additive suffix
+│   │   │   │   │   ├── linear multiplicative
+│   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   ├── variable
 │   │   │   │   ├── linear additive suffix
 │   │   ├── comparison
 │   │   ├── linear expression
@@ -80,6 +102,14 @@ file
 │   │   │   │   │   │   ├── sign
 │   │   │   │   │   │   ├── real number
 │   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   ├── irrational
+│   │   │   │   │   │   ├── variable
+│   │   │   │   ├── linear additive suffix
+│   │   │   │   │   ├── linear multiplicative
+│   │   │   │   │   │   ├── sign
+│   │   │   │   │   │   ├── real number
+│   │   │   │   │   │   │   ├── rational
+│   │   │   │   │   │   │   ├── irrational
 │   │   │   │   │   │   ├── variable
 │   │   │   │   ├── linear additive suffix
 │   │   ├── comparison

@@ -1,7 +1,7 @@
 #include "simplex.hpp"
 
-void simplex::simplex(Node* head, Variables* variables, FILE* fptr) {
+void simplex::simplex(Node* head, Variables* variables, const char* path, bool verbose) {
     Tableau tableau(head, variables);
-    // tableau.solve();
-    tableau.print(fptr);
+    if(tableau.solve() == -1) return;
+    tableau.solution(path, variables, verbose);
 }
