@@ -86,7 +86,7 @@ int Tableau::get_pivot(std::pair<int, int> &piv, int obj_row) {
     bool empty = true;
     for(int r = 0; r < this->row - 2; r++) { // excluding phase 1 and 2
         if(cmp(this->mat[r][this->column - 1],"<",0) || 
-           cmp(this->mat[r][piv.second],"<",0)) continue; // non-negative
+           cmp(this->mat[r][piv.second],"<=",0)) continue; // non-negative
         temp = this->mat[r][this->column - 1] / this->mat[r][piv.second];
         if(empty) { 
             extrema = temp; 
@@ -163,13 +163,10 @@ Tableau::Tableau(Node* head, Variables* variables) {
                 Node *coefficient = nullptr, *variable = nullptr;
                 negative = multiplicative->subtype == 2;
                 for(int k = 0; k < multiplicative->length; k++) {
-                    if(multiplicative->next[k]->type == nt_rational ||
-                       multiplicative->next[k]->type == nt_irrational) {
+                    if(multiplicative->next[k]->type == nt_real)
                         coefficient = multiplicative->next[k];
-                    }
-                    if(multiplicative->next[k]->type == lt_variable) {
+                    if(multiplicative->next[k]->type == lt_variable)
                         variable = multiplicative->next[k];
-                    }
                 }
                 /* populate matrix */
                 if(variable) {
@@ -203,13 +200,10 @@ Tableau::Tableau(Node* head, Variables* variables) {
                     Node *coefficient = nullptr, *variable = nullptr;
                     negative = multiplicative->subtype == 2;
                     for(int k = 0; k < multiplicative->length; k++) {
-                        if(multiplicative->next[k]->type == nt_rational ||
-                           multiplicative->next[k]->type == nt_irrational) {
+                        if(multiplicative->next[k]->type == nt_real)
                             coefficient = multiplicative->next[k];
-                        }
-                        if(multiplicative->next[k]->type == lt_variable) {
+                        if(multiplicative->next[k]->type == lt_variable)
                             variable = multiplicative->next[k];
-                        }
                     }
                     /* populate matrix */
                     if(variable) {

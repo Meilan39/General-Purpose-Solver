@@ -1,5 +1,5 @@
 file
-├── LP
+├── ILP
 │   ├── objective
 │   ├── linear expression
 │   │   ├── linear additive
@@ -15,12 +15,6 @@ file
 │   │   │   │   │   │   ├── rational
 │   │   │   │   │   ├── variable
 │   │   │   ├── linear additive suffix
-│   │   │   │   ├── linear multiplicative
-│   │   │   │   │   ├── sign
-│   │   │   │   │   ├── real number
-│   │   │   │   │   │   ├── rational
-│   │   │   │   │   ├── variable
-│   │   │   ├── linear additive suffix
 │   ├── linear constraint
 │   │   ├── linear expression
 │   │   │   ├── linear additive
@@ -29,12 +23,6 @@ file
 │   │   │   │   │   ├── real number
 │   │   │   │   │   │   ├── rational
 │   │   │   │   │   ├── variable
-│   │   │   │   ├── linear additive suffix
-│   │   │   │   │   ├── linear multiplicative
-│   │   │   │   │   │   ├── sign
-│   │   │   │   │   │   ├── real number
-│   │   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   ├── variable
 │   │   │   │   ├── linear additive suffix
 │   │   │   │   │   ├── linear multiplicative
 │   │   │   │   │   │   ├── sign
@@ -68,47 +56,6 @@ file
 │   │   │   │   │   │   ├── sign
 │   │   │   │   │   │   ├── real number
 │   │   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   ├── variable
-│   │   │   │   ├── linear additive suffix
-│   │   │   │   │   ├── linear multiplicative
-│   │   │   │   │   │   ├── sign
-│   │   │   │   │   │   ├── real number
-│   │   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   ├── variable
-│   │   │   │   ├── linear additive suffix
-│   │   ├── comparison
-│   │   ├── linear expression
-│   │   │   ├── linear additive
-│   │   │   │   ├── linear multiplicative
-│   │   │   │   │   ├── sign
-│   │   │   │   │   ├── real number
-│   │   │   │   │   │   ├── rational
-│   │   │   │   │   ├── variable
-│   │   │   │   │   ├── sign
-│   │   │   │   │   ├── real number
-│   │   │   │   │   │   ├── rational
-│   │   │   │   ├── linear additive suffix
-│   ├── linear constraint
-│   │   ├── linear expression
-│   │   │   ├── linear additive
-│   │   │   │   ├── linear multiplicative
-│   │   │   │   │   ├── sign
-│   │   │   │   │   ├── real number
-│   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   ├── irrational
-│   │   │   │   │   ├── variable
-│   │   │   │   ├── linear additive suffix
-│   │   │   │   │   ├── linear multiplicative
-│   │   │   │   │   │   ├── sign
-│   │   │   │   │   │   ├── real number
-│   │   │   │   │   │   │   ├── rational
-│   │   │   │   │   │   │   ├── irrational
-│   │   │   │   │   │   ├── variable
-│   │   │   │   ├── linear additive suffix
-│   │   │   │   │   ├── linear multiplicative
-│   │   │   │   │   │   ├── sign
-│   │   │   │   │   │   ├── real number
-│   │   │   │   │   │   │   ├── rational
 │   │   │   │   │   │   │   ├── irrational
 │   │   │   │   │   │   ├── variable
 │   │   │   │   ├── linear additive suffix
@@ -131,9 +78,36 @@ file
 │   │   │   │   │   ├── sign
 │   │   │   │   │   ├── real number
 │   │   │   │   │   │   ├── rational
+│   │   │   │   │   ├── variable
+│   │   │   │   ├── linear additive suffix
+│   │   ├── comparison
+│   │   ├── linear expression
+│   │   │   ├── linear additive
+│   │   │   │   ├── linear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── real number
+│   │   │   │   │   │   ├── rational
+│   │   │   │   │   ├── variable
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── real number
+│   │   │   │   │   │   ├── rational
+│   │   │   │   ├── linear additive suffix
+│   ├── linear constraint
+│   │   ├── linear expression
+│   │   │   ├── linear additive
+│   │   │   │   ├── linear multiplicative
+│   │   │   │   │   ├── sign
+│   │   │   │   │   ├── real number
+│   │   │   │   │   │   ├── rational
 │   │   │   │   │   │   ├── irrational
 │   │   │   │   │   ├── variable
 │   │   │   │   │   ├── sign
 │   │   │   │   │   ├── real number
 │   │   │   │   │   │   ├── rational
 │   │   │   │   │   │   ├── irrational
+│   ├── variable constraint
+│   │   ├── variable
+│   ├── variable constraint
+│   │   ├── variable
+│   ├── variable constraint
+│   │   ├── variable

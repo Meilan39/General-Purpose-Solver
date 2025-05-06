@@ -1,29 +1,22 @@
 file
-└── LP
+└── ILP
     ├── objective
-    │   └── Maximize
+    │   └── Minimize
     ├── linear expression
     │   └── linear additive
     │       ├── linear multiplicative |positive|
     │       │   ├── real number
     │       │   │   └── rational
-    │       │   │       └── number {2.000000}
+    │       │   │       └── number {6.000000}
     │       │   └── variable
     │       │       └── variable {0.000000}
-    │       ├── linear additive suffix
-    │       │   └── linear multiplicative |positive|
-    │       │       ├── real number
-    │       │       │   └── rational
-    │       │       │       └── number {3.000000}
-    │       │       └── variable
-    │       │           └── variable {1.000000}
     │       └── linear additive suffix
     │           └── linear multiplicative |positive|
     │               ├── real number
     │               │   └── rational
-    │               │       └── number {4.000000}
+    │               │       └── number {3.000000}
     │               └── variable
-    │                   └── variable {2.000000}
+    │                   └── variable {1.000000}
     ├── Constraint
     ├── linear constraint
     │   ├── linear expression
@@ -31,28 +24,21 @@ file
     │   │       ├── linear multiplicative |positive|
     │   │       │   ├── real number
     │   │       │   │   └── rational
-    │   │       │   │       └── number {3.000000}
+    │   │       │   │       └── decimal {1.400000}
     │   │       │   └── variable
     │   │       │       └── variable {0.000000}
-    │   │       ├── linear additive suffix
-    │   │       │   └── linear multiplicative |positive|
-    │   │       │       ├── real number
-    │   │       │       │   └── rational
-    │   │       │       │       └── number {2.000000}
-    │   │       │       └── variable
-    │   │       │           └── variable {1.000000}
     │   │       └── linear additive suffix
     │   │           └── linear multiplicative |positive|
     │   │               └── variable
-    │   │                   └── variable {2.000000}
+    │   │                   └── variable {1.000000}
     │   ├── comparison
-    │   │   └── <=
+    │   │   └── >=
     │   └── linear expression
     │       └── linear additive
     │           └── linear multiplicative |positive|
     │               └── real number
     │                   └── rational
-    │                       └── number {10.000000}
+    │                       └── number {1.000000}
     ├── linear constraint
     │   ├── linear expression
     │   │   └── linear additive
@@ -62,20 +48,27 @@ file
     │   │       │   │       └── number {2.000000}
     │   │       │   └── variable
     │   │       │       └── variable {0.000000}
-    │   │       ├── linear additive suffix
-    │   │       │   └── linear multiplicative |positive|
-    │   │       │       ├── real number
-    │   │       │       │   └── rational
-    │   │       │       │       └── number {3.000000}
-    │   │       │       └── variable
-    │   │       │           └── variable {1.000000}
     │   │       └── linear additive suffix
-    │   │           └── linear multiplicative |positive|
-    │   │               ├── real number
-    │   │               │   └── rational
-    │   │               │       └── number {3.000000}
+    │   │           └── linear multiplicative |negative|
     │   │               └── variable
-    │   │                   └── variable {2.000000}
+    │   │                   └── variable {1.000000}
+    │   ├── comparison
+    │   │   └── >=
+    │   └── linear expression
+    │       └── linear additive
+    │           └── linear multiplicative |positive|
+    │               └── real number
+    │                   └── rational
+    │                       └── number {1.000000}
+    ├── linear constraint
+    │   ├── linear expression
+    │   │   └── linear additive
+    │   │       └── linear multiplicative |positive|
+    │   │           ├── real number
+    │   │           │   └── rational
+    │   │           │       └── number {3.000000}
+    │   │           └── variable
+    │   │               └── variable {1.000000}
     │   ├── comparison
     │   │   └── <=
     │   └── linear expression
@@ -83,26 +76,11 @@ file
     │           └── linear multiplicative |positive|
     │               └── real number
     │                   └── rational
-    │                       └── number {15.000000}
-    └── linear constraint
-        ├── linear expression
-        │   └── linear additive
-        │       ├── linear multiplicative |positive|
-        │       │   └── variable
-        │       │       └── variable {0.000000}
-        │       ├── linear additive suffix
-        │       │   └── linear multiplicative |positive|
-        │       │       └── variable
-        │       │           └── variable {1.000000}
-        │       └── linear additive suffix
-        │           └── linear multiplicative |negative|
-        │               └── variable
-        │                   └── variable {2.000000}
-        ├── comparison
-        │   └── >=
-        └── linear expression
-            └── linear additive
-                └── linear multiplicative |positive|
-                    └── real number
-                        └── rational
-                            └── number {4.000000}
+    │                       └── number {2.000000}
+    ├── General
+    ├── variable constraint
+    │   └── variable
+    │       └── variable {0.000000}
+    └── variable constraint
+        └── variable
+            └── variable {1.000000}

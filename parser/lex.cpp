@@ -83,11 +83,6 @@ const l_Map l_map[] = {
     {"e", lt_e},
     {"pi", lt_pi},
     {"variable", lt_variable},
-    /* Modes */
-    {"LP", lt_lp},
-    {"ILP", lt_ilp},
-    {"UNLP", lt_unlp},
-    {"CNLP", lt_cnlp},
     /* commands */
     {"Maximize", lt_maximize},
     {"Minimize", lt_minimize},

@@ -31,11 +31,6 @@ typedef enum l_Types {
     lt_e,
     lt_pi,
     lt_variable, 
-    /* Modes */
-    lt_lp,
-    lt_ilp,
-    lt_unlp,
-    lt_cnlp,
     /* commands */
     lt_maximize,
     lt_minimize,

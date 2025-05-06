@@ -17,6 +17,10 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
     }
 
     bnb::branch(head, variables, general, optimal);
+    if(optimal.empty()) {
+        printf("Error: unable to find mixed integer solution\n");
+        return;
+    }
 
     /* print solution */
     FILE* fptr = fopen(path, "a");
@@ -64,22 +68,23 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
             n_insert(mode, node, bnb::insidx);
             bnb::branch(head, variables, general, optimal);
             n_delete(mode, bnb::insidx);
-        } else return;
+        }
         /* right side */
         if(!bnb::exists(head, idx, floorf(solution[idx]))) {
             Node* node = bnb::new_constraint(idx, ceill(solution[idx]), false);
             n_insert(mode, node, bnb::insidx);
             bnb::branch(head, variables, general, optimal);
             n_delete(mode, bnb::insidx);
-        } else return;
+        }
     }
 }
 
+/* dangerous function */
 bool bnb::exists(Node* head, int idx, double number) {
     for(int i = bnb::insidx; head->next[0]->next[i]->type != lt_general; i++) {
         Node* constraint = head->next[0]->next[i];
-        if((constraint->next[0]->next[0]->next[0]->value == idx) ||
-           (constraint->next[2]->next[0]->next[0]->next[0]->value == number)) {
+        if((cmp(constraint->next[0]->next[0]->next[0]->value,"==",idx)) ||
+           (cmp(constraint->next[2]->next[0]->next[0]->next[0]->next[0]->value,"==",number))) {
             return true;
         }
     } return false; 
@@ -90,7 +95,8 @@ Node* bnb::new_constraint(int idx, double number, bool left) {
     Node* linear_constraint = n_construct(nt_linear_constraint, 0);
     Node *linear_additive = n_construct(nt_linear_additive, 0),
          *linear_multiplicative = n_construct(nt_linear_multiplicative, 0),
-         *linear_term = n_construct(lt_variable, idx);
+         *linear_term = n_construct(lt_variable, idx),
+         *linear_rational;
     linear_multiplicative->subtype = 1;
     n_push(linear_multiplicative, linear_term);
     n_push(linear_additive, linear_multiplicative);
@@ -101,12 +107,14 @@ Node* bnb::new_constraint(int idx, double number, bool left) {
     /* constant */
     linear_additive = n_construct(nt_linear_additive, 0);
     linear_multiplicative = n_construct(nt_linear_multiplicative, 0);
-    linear_term = n_construct(nt_rational, 0);
+    linear_term = n_construct(nt_real, 0);
+    linear_rational = n_construct(nt_rational, 0);
     if(cmp(number,"<",0)) {
         linear_multiplicative->subtype = 2;
         number = -number;
     } else linear_multiplicative->subtype = 1;
-    n_push(linear_term, n_construct(ct_number, number));
+    n_push(linear_rational, n_construct(ct_number, number));
+    n_push(linear_term, linear_rational);
     n_push(linear_multiplicative, linear_term);
     n_push(linear_additive, linear_multiplicative);
     n_push(linear_constraint, linear_additive);

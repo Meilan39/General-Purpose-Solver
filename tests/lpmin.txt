@@ -1,4 +1,3 @@
-LP
 Minimize
     6x1 + 3x2;
 Constrain

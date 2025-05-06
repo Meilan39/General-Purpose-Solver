@@ -31,16 +31,16 @@ Node* s_file(Token** token, int depth) {
     PRINTMAP(depth, "file", token)
     Node* node = n_construct(nt_file, 0);
     Token* ptoken = *token;
-    if(!n_push(node, s_lp(token, depth+1))) goto c2;
+    if(!n_push(node, s_ilp(token, depth+1))) goto c2;
     goto t;
 c2: *token = ptoken; n_reset(node);
-    if(!n_push(node, s_ilp(token, depth+1))) goto c3;
+    if(!n_push(node, s_lp(token, depth+1))) goto c3;
     goto t;
 c3: *token = ptoken; n_reset(node);
-    if(!n_push(node, s_unlp(token, depth+1))) goto c4;
+    if(!n_push(node, s_cnlp(token, depth+1))) goto c4;
     goto t;
 c4: *token = ptoken; n_reset(node);
-    if(!n_push(node, s_cnlp(token, depth+1))) goto f;
+    if(!n_push(node, s_unlp(token, depth+1))) goto f;
     goto t;
 f : *token = ptoken;
     return n_free(node);
@@ -50,7 +50,6 @@ Node* s_lp(Token** token, int depth) {
     PRINTMAP(depth, "LP", token)
     Node* node = n_construct(nt_lp, 0);
     Token* ptoken = *token;
-    if(!s_compare(token, lt_lp)) goto f;
     if(!n_push(node, s_objective(token, depth+1))) goto f;
     if(!n_push(node, s_linear_expression(token, depth+1))) goto f;
     if(!s_compare(token, lt_semicolon)) goto f;
@@ -65,7 +64,6 @@ Node* s_ilp(Token** token, int depth) {
     PRINTMAP(depth, "ILP", token)
     Node* node = n_construct(nt_ilp, 0);
     Token* ptoken = *token;
-    if(!s_compare(token, lt_ilp)) goto f;
     if(!n_push(node, s_objective(token, depth+1))) goto f;
     if(!n_push(node, s_linear_expression(token, depth+1))) goto f;
     if(!s_compare(token, lt_semicolon)) goto f;
@@ -82,7 +80,6 @@ Node* s_unlp(Token** token, int depth) {
     PRINTMAP(depth, "UNLP", token)
     Node* node = n_construct(nt_unlp, 0);
     Token* ptoken = *token;
-    if(!s_compare(token, lt_unlp)) goto f;
     if(!n_push(node, s_objective(token, depth+1))) goto f;
     if(!n_push(node, s_nonlinear_expression(token, depth+1))) goto f;
     if(!s_compare(token, lt_semicolon)) goto f;
@@ -95,7 +92,6 @@ Node* s_cnlp(Token** token, int depth) {
     PRINTMAP(depth, "CNLP", token)
     Node* node = n_construct(nt_cnlp, 0);
     Token* ptoken = *token;
-    if(!s_compare(token, lt_cnlp)) goto f;
     if(!n_push(node, s_objective(token, depth+1))) goto f;
     if(!n_push(node, s_nonlinear_expression(token, depth+1))) goto f;
     if(!s_compare(token, lt_semicolon)) goto f;

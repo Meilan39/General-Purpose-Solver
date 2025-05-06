@@ -1,19 +1,15 @@
-<File> ::= <lp> | <ilp> | <unlp> | <cnlp>
+<File> ::= <ilp> | <lp> | <cnlp> | <unlp>
 
-<lp> ::= LP 
-         <objective> <linear_expression> ;
+<lp> ::= <objective> <linear_expression> ;
          Constrain {<linear_constraint>}*
 
-<ilp> ::= ILP
-          <objective> <linear_expression> ;
+<ilp> ::= <objective> <linear_expression> ;
           Constrain {<linear_constraint>}* 
           General {<variable_constraint}*
 
-<unlp> ::= UNLP
-           <objective> <nonlinear_expression> ;
+<unlp> ::= <objective> <nonlinear_expression> ;
 
-<cnlp> ::= CNLP
-           <objective> <nonlinear_expression> ;
+<cnlp> ::= <objective> <nonlinear_expression> ;
            Constrain {<nonlinear_constraint>}*
 
 /* ---------------------- linear ----------------------- */

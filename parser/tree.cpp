@@ -261,10 +261,6 @@ const char* const n_typtostr_map[nt_terminator] = {
     [lt_e] = "e",
     [lt_pi] = "pi",
     [lt_variable] = "variable",
-    [lt_lp] = "LP",
-    [lt_ilp] = "ILP",
-    [lt_unlp] = "UNLP",
-    [lt_cnlp] = "CNLP",
     [lt_maximize] = "Maximize",
     [lt_minimize] = "Minimize",
     [lt_constrain] = "Constraint",
@@ -321,16 +317,17 @@ const char n_chain_exception_map[] = {
     [nt_linear_multiplicative] = 1,
     [nt_nonlinear_multiplicative] = 1,
     [nt_nonlinear_exponential] = 1,
+    [nt_nonlinear_primary] = 1,
     [nt_nonlinear_parenthesis] = 1,
     [nt_variable_constraint] = 1,
     [nt_irrational] = 1,
     [nt_rational] = 1,
+    [nt_real] = 1,
 };
 
 const char n_suffix_exception_map[] = {
     [nt_linear_additive] = 1,
     [nt_nonlinear_additive] = 1,
-    [nt_linear_multiplicative] = 1,
     [nt_nonlinear_multiplicative] = 1,
     [nt_nonlinear_exponential] = 1,
 };
