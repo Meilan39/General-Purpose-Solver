@@ -8,7 +8,7 @@ int Tableau::solve() {
         pivot(piv);
     }
     if(cmp(this->mat[this->row - 1][this->column - 1],"!=",0)) {
-        printf("Error: infeasible constraints\n");
+        this->flag = sf_infeasible; 
         return -1;
     }
     /* phase two */
@@ -20,15 +20,10 @@ int Tableau::solve() {
     return 0;
 }
 
-void Tableau::solution(const char* path, Variables* variables, bool verbose) {
-    FILE* fptr = fopen(path, "a");
-    if(fptr == NULL) {
-        printf("Error: unable to open file");
-        return;
-    }
-    fprintf(fptr, "\nSolution\n");
-    int end = this->column - (verbose ? this->artificial+1 : this->artificial+this->slack+1);
-    for(int c = 0; c < end; c++) { // defined / defined + slack
+std::vector<double> Tableau::solution(bool verbose) {
+    int end = this->column - this->artificial - 1 - (verbose ? 0 : this->slack);
+    std::vector<double> ret (end + 1);
+    for(int c = 0; c < end; c++) { 
         bool basic = true;
         int oneIdx = -1;
         for(int r = 0; r < this->row - 2; r++) {
@@ -41,17 +36,10 @@ void Tableau::solution(const char* path, Variables* variables, bool verbose) {
                 basic = false;
             }
         }
-        if(c < this->defined) {
-            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[c], 
-                                     basic ? this->mat[oneIdx][this->column - 1] : 0);
-        } else if(c < (this->defined + this->slack)) {
-            fprintf(fptr, "\ts%d  = %7.2f;\n", c - this->defined + 1, 
-                                     basic ? this->mat[oneIdx][this->column - 1] : 0);
-        }
+        ret[c] = (basic ? this->mat[oneIdx][this->column - 1] : 0);
     }
-    fprintf(fptr, "\t%-3s = %7.2f;\n", "Z", 
-                    (this->minimize ? -1 : 1) * this->mat[this->row - 2][this->column - 1]);
-    fclose(fptr);
+    ret[end] = (this->minimize ? -1 : 1) * this->mat[this->row - 2][this->column - 1];
+    return ret;
 }
 
 bool Tableau::optimal(int obj_row) {
@@ -112,8 +100,8 @@ int Tableau::get_pivot(std::pair<int, int> &piv, int obj_row) {
         }
     } 
     if(empty) {
-        if(minimize) printf("Error: infeasible constraints\n");
-        else         printf("Error: unbounded constraints\n");
+        if(minimize) this->flag = sf_infeasible;
+        else         this->flag = sf_unbounded;
         return -1;
     }
     return 0;
@@ -125,16 +113,6 @@ void Tableau::print() {
             printf("%+3.3f ", d);
         printf("\n");
     } printf("\n");
-}
-
-bool Tableau::cmp(const double &a, const char* s, const double &b) {
-    if(strcmp(s, "<" )==0) return (b - a) > TOLERANCE;
-    if(strcmp(s, "<=")==0) return (b - a) > -TOLERANCE;
-    if(strcmp(s, "==")==0) return abs(a - b) < TOLERANCE; 
-    if(strcmp(s, "!=")==0) return abs(a - b) > TOLERANCE;
-    if(strcmp(s, ">=")==0) return (a - b) > -TOLERANCE; 
-    if(strcmp(s, ">" )==0) return (a - b) > TOLERANCE;
-    return 0;
 }
 
 Tableau::Tableau(Node* head, Variables* variables) {

@@ -68,7 +68,7 @@ Node** n_findd(Node* head, int type) {
 }
 
 int n_push(Node* head, Node* node) {
-    if(!node) return 0;
+    if(!head || !node) return 0;
     if((head->length)++) head->next = (Node**)realloc(head->next, head->length * sizeof(Node*));
     else head->next = (Node**)malloc(head->length * sizeof(Node*));
     head->next[head->length - 1] = node;   
@@ -76,7 +76,7 @@ int n_push(Node* head, Node* node) {
 }
 
 int n_pushfront(Node* head, Node* node) {
-    if(!node) return 0;
+    if(!head || !node) return 0;
     if((head->length)++) {
         Node** temp = (Node**)malloc(head->length * sizeof(Node*));
         for(int i = 0; i < head->length - 1; i++)
@@ -88,22 +88,30 @@ int n_pushfront(Node* head, Node* node) {
     return 1;
 }
 
-int n_delete(Node* head, int n, ...) {
-    if(!(n > 0)) return 0;
-    va_list args;
-    va_start(args, n);
-    int idx = 0, next = va_arg(args, int);
-    for(int i = 0; i < head->length; i++) {
-        if(next == i) {
-            n_free(head->next[i]);
-            next = (--n) ? va_arg(args, int) : next;
-            continue;
-        }
-        head->next[idx++] = head->next[i];
+int n_insert(Node* head, Node* node, int index) {
+    if(!head || !node) return 0;
+    if(index < 0 || head->length < index) return 0;
+    if(index < head->length) {
+        head->next = (Node**)realloc(head->next, (head->length + 1)*sizeof(Node*));
+        if(head->next == NULL) return -1;
+        for(int i = head->length; i > index; i--) 
+            head->next[i] = head->next[i-1];
+        head->next[index] = node;
+        head->length++;
+    } else {
+        return n_push(head, node);
     }
-    head->length = idx + 1;
-    va_end(args);
-    return 1;
+    return 0;
+}
+
+int n_delete(Node* head, int index) {
+    if(!head) return 0;
+    if(index < 0 || head->length <= index) return 0;
+    n_free(head->next[index]);
+    head->length--;
+    for(int i = index; i < head->length; i++)
+        head->next[i] = head->next[i+1];
+    return 0;
 }
 
 int n_emplace(Node* head, int length) {
@@ -314,6 +322,7 @@ const char n_chain_exception_map[] = {
     [nt_nonlinear_multiplicative] = 1,
     [nt_nonlinear_exponential] = 1,
     [nt_nonlinear_parenthesis] = 1,
+    [nt_variable_constraint] = 1,
     [nt_irrational] = 1,
     [nt_rational] = 1,
 };

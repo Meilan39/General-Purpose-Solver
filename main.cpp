@@ -5,6 +5,7 @@
 #include "parser/token.hpp"
 #include "parser/syn.hpp"
 #include "simplex/simplex.hpp"
+#include "BNB/bnb.hpp"
 
 int main(int argc, char *argv[]) {
     bool v = false;
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
     // solve
     switch(head->next[0]->type) {
         case nt_lp: simplex::simplex(head, tokens->variables, argv[1], v); break;
-        case nt_ilp:
+        case nt_ilp: bnb::bnb(head, tokens->variables, argv[1]); break;
         case nt_unlp:
         case nt_cnlp:
         default: break;

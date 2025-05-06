@@ -21,14 +21,11 @@ typedef struct NODE{
 Node* n_free(Node* head);
 Node* n_reset(Node* head);
 Node* n_construct(int type, double value);
-Node* n_pop(Node* head, int index);
-Node* n_pick(Node* head, int index);
-Node* n_copy(Node* head);
 Node** n_findd(Node* head, int type);
-Node** n_findb(Node* head, int type);
 int n_push(Node* head, Node* node);
 int n_pushfront(Node* head, Node* node);
-int n_delete(Node* head, int n, ...);
+int n_insert(Node* head, Node* node, int index);
+int n_delete(Node* head, int index);
 int n_emplace(Node* head, int length);
 int n_replace(Node** head, Node* next);
 void n_print(Node* head, const char* path);
