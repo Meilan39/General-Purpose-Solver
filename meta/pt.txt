@@ -1,5 +1,5 @@
 file
-└── LP
+└── ILP
     ├── objective
     │   └── Minimize
     ├── linear expression
@@ -60,17 +60,24 @@ file
     │               └── real number
     │                   └── rational
     │                       └── number {2.000000}
-    └── linear constraint
-        ├── linear expression
-        │   └── linear additive
-        │       └── linear multiplicative |positive|
-        │           └── variable
-        │               └── variable {1.000000}
-        ├── comparison
-        │   └── <=
-        └── linear expression
-            └── linear additive
-                └── linear multiplicative |positive|
-                    └── real number
-                        └── rational
-                            └── decimal {5.500000}
+    ├── linear constraint
+    │   ├── linear expression
+    │   │   └── linear additive
+    │   │       └── linear multiplicative |positive|
+    │   │           └── variable
+    │   │               └── variable {1.000000}
+    │   ├── comparison
+    │   │   └── <=
+    │   └── linear expression
+    │       └── linear additive
+    │           └── linear multiplicative |positive|
+    │               └── real number
+    │                   └── rational
+    │                       └── decimal {5.500000}
+    ├── General
+    ├── variable constraint
+    │   └── variable
+    │       └── variable {0.000000}
+    └── variable constraint
+        └── variable
+            └── variable {1.000000}

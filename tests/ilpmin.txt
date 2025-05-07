@@ -4,3 +4,5 @@ Constrain
     1.4x1 + x2 >= 7;
     -2x1 + x2 <= 2;
     x2 <= 5.5;
+General
+    x1; x2;
