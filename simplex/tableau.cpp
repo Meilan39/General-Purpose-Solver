@@ -1,6 +1,13 @@
 #include "tableau.hpp"
 
 int Tableau::solve() {
+    /* temporary solution to RHS non-negative constraint */
+    for(int r = 0; r < this->row - 2; r++) {
+        if(cmp(this->mat[r][this->column - 1],"<",0)) {
+            this->flag = sf_nonstandard;
+            return -1;
+        }
+    }
     /* phase one */
     while(!optimal(this->row - 1)) {
         std::pair<int, int> piv;
@@ -74,7 +81,8 @@ int Tableau::get_pivot(std::pair<int, int> &piv, int obj_row) {
     /* column */
     extrema = this->mat[obj_row][0]; 
     piv.second = 0;
-    for(int c = 1; c < this->column - 1; c++) { // excluding b
+    int end = this->column - (minimize ? 1 : this->artificial + 1);
+    for(int c = 1; c < end; c++) { // excluding b
         temp = this->mat[obj_row][c];
         if(( minimize && cmp(temp,">",extrema)) || 
            (!minimize && cmp(temp,"<",extrema))) {
@@ -227,6 +235,5 @@ Tableau::Tableau(Node* head, Variables* variables) {
             }
             con_row++; // next constraint row
         }
-        //
     }
 }

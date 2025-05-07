@@ -7,7 +7,7 @@
 #include "../parser/tree.hpp"
 #include "../parser/token.hpp"
 
-typedef enum simplex_flag {sf_unbounded = 1, sf_infeasible = 2} Simplex_Flag; 
+typedef enum simplex_flag {sf_unbounded = 1, sf_infeasible = 2, sf_nonstandard = 3} Simplex_Flag; 
 
 class Tableau {
 public:

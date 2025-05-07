@@ -3,8 +3,9 @@
 void simplex::simplex(Node* head, Variables* variables, const char* path, bool verbose) {
     Tableau tableau(head, variables);
     if(tableau.solve() == -1) {
-        if(tableau.flag == sf_infeasible) printf("Error: infeasible constraints\n");
-        if(tableau.flag == sf_unbounded)  printf("Error: unbounded constraints\n");
+        if(tableau.flag == sf_infeasible)  printf("Error: infeasible constraints\n");
+        if(tableau.flag == sf_unbounded)   printf("Error: unbounded constraints\n");
+        if(tableau.flag == sf_nonstandard) printf("Error: non-standard input\n");
         return;
     }
     /* print solution */

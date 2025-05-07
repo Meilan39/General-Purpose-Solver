@@ -144,14 +144,14 @@ Node* s_linear_multiplicative(Token** token, int depth) {
     PRINTMAP(depth, "linear multiplicative", token)
     Node* node = n_construct(nt_linear_multiplicative, 0);
     Token* ptoken = *token;
-    s_divide_flag = 0;
+    int pflag = s_minus_flag;
     s_sign(token, depth+1); 
     n_push(node, s_real(token, depth+1));
     s_compare(token, lt_dot);
     if(!n_push(node, s_variable(token, depth+1))) goto c2;
     node->subtype = s_minus_flag ? 2 : 1;
     goto t;
-c2: *token = ptoken; n_reset(node);
+c2: *token = ptoken; n_reset(node); s_minus_flag = pflag;
     s_sign(token, depth+1);
     if(!n_push(node, s_real(token, depth+1))) goto f;
     node->subtype = s_minus_flag ? 2 : 1;
