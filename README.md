@@ -7,8 +7,24 @@
 ```
 例：既存のILP最小化問題を実行する場合
 ```
-./gpsolve ./tests/unlp.txt
+./gpsolve ./tests/ilpmin.txt
 ```
+例：エラーはコンソールに出力、解はファイルに書き足される
+```
+Minimize
+    6x1 + 3x2;
+Constrain
+    1.4x1 + x2 >= 7;
+    -2x1 + x2 <= 2;
+    x2 <= 5.5;
+General
+    x1; x2;
+Solution
+    x1  =    2.00;
+    x2  =    5.00;
+    Z   =   27.00;
+```
+注意：解がすでに書かれているファイルは lexical error と表示される
 ## LP ファイル形式
 BNF規定：
 ```
