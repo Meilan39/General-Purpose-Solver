@@ -73,7 +73,7 @@
 
 <real_number> ::= <rational> | <irrational>
 
-<rational> ::= <scientific> | <decimal> | <number> | <zero>
+<rational> ::= <decimal> | <number> | <zero>
 
 <objective> ::= Minimize | Maximize
 

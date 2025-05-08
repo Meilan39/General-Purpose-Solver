@@ -1,3 +1,2 @@
-UNLP
 Maximize 
     2x^2 + (e^2 + 1)/4 - log(2, 10);

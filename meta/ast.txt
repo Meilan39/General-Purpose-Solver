@@ -1,60 +1,56 @@
 file
-└── ILP
-    ├── Minimize
-    ├── linear additive
-    │   ├── linear multiplicative |positive|
-    │   │   ├── real number
-    │   │   │   └── rational
-    │   │   │       └── number {6.000000}
-    │   │   └── variable {0.000000}
-    │   └── linear multiplicative |positive|
-    │       ├── real number
-    │       │   └── rational
-    │       │       └── number {3.000000}
-    │       └── variable {1.000000}
-    ├── Constraint
-    ├── linear constraint
-    │   ├── linear additive
-    │   │   ├── linear multiplicative |positive|
-    │   │   │   ├── real number
-    │   │   │   │   └── rational
-    │   │   │   │       └── decimal {1.400000}
-    │   │   │   └── variable {0.000000}
-    │   │   └── linear multiplicative |positive|
-    │   │       └── variable {1.000000}
-    │   ├── >=
-    │   └── linear additive
-    │       └── linear multiplicative |positive|
-    │           └── real number
-    │               └── rational
-    │                   └── number {7.000000}
-    ├── linear constraint
-    │   ├── linear additive
-    │   │   ├── linear multiplicative |negative|
-    │   │   │   ├── real number
-    │   │   │   │   └── rational
-    │   │   │   │       └── number {2.000000}
-    │   │   │   └── variable {0.000000}
-    │   │   └── linear multiplicative |positive|
-    │   │       └── variable {1.000000}
-    │   ├── <=
-    │   └── linear additive
-    │       └── linear multiplicative |positive|
-    │           └── real number
-    │               └── rational
-    │                   └── number {2.000000}
-    ├── linear constraint
-    │   ├── linear additive
-    │   │   └── linear multiplicative |positive|
-    │   │       └── variable {1.000000}
-    │   ├── <=
-    │   └── linear additive
-    │       └── linear multiplicative |positive|
-    │           └── real number
-    │               └── rational
-    │                   └── decimal {5.500000}
-    ├── General
-    ├── variable constraint
-    │   └── variable {0.000000}
-    └── variable constraint
-        └── variable {1.000000}
+└── UNLP
+    ├── Maximize
+    └── nonlinear additive
+        ├── nonlinear multiplicative |positive|
+        │   ├── nonlinear exponential |product|
+        │   │   └── nonlinear primary
+        │   │       └── real number
+        │   │           └── rational
+        │   │               └── number {2.000000}
+        │   └── nonlinear exponential |product|
+        │       ├── nonlinear primary
+        │       │   └── variable {0.000000}
+        │       └── nonlinear primary
+        │           └── real number
+        │               └── rational
+        │                   └── number {2.000000}
+        ├── nonlinear multiplicative |positive|
+        │   ├── nonlinear exponential |product|
+        │   │   └── nonlinear primary
+        │   │       └── nonlinear parenthesis
+        │   │           └── nonlinear additive
+        │   │               ├── nonlinear multiplicative |positive|
+        │   │               │   └── nonlinear exponential |product|
+        │   │               │       ├── nonlinear primary
+        │   │               │       │   └── real number
+        │   │               │       │       └── irrational
+        │   │               │       │           └── e
+        │   │               │       └── nonlinear primary
+        │   │               │           └── real number
+        │   │               │               └── rational
+        │   │               │                   └── number {2.000000}
+        │   │               └── nonlinear multiplicative |positive|
+        │   │                   └── nonlinear exponential |product|
+        │   │                       └── nonlinear primary
+        │   │                           └── real number
+        │   │                               └── rational
+        │   │                                   └── number {1.000000}
+        │   └── nonlinear exponential |quotient|
+        │       └── nonlinear primary
+        │           └── real number
+        │               └── rational
+        │                   └── number {4.000000}
+        └── nonlinear multiplicative |positive|
+            └── nonlinear exponential |product|
+                └── nonlinear primary
+                    └── functions
+                        └── log
+                            ├── number {2.000000}
+                            └── nonlinear additive
+                                └── nonlinear multiplicative |positive|
+                                    └── nonlinear exponential |product|
+                                        └── nonlinear primary
+                                            └── real number
+                                                └── rational
+                                                    └── number {10.000000}
