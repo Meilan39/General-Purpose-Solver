@@ -63,15 +63,15 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
     } else {
         Node* mode = head->next[0];
         /* left side */
-        if(!bnb::exists(head, idx, floorf(solution[idx]))) {
-            Node* node = bnb::new_constraint(idx, floorf(solution[idx]), true);
+        if(!bnb::exists(head, idx, floor(solution[idx]))) {
+            Node* node = bnb::new_constraint(idx, floor(solution[idx]), true);
             n_insert(mode, node, bnb::insidx);
             bnb::branch(head, variables, general, optimal);
             n_delete(mode, bnb::insidx);
         }
         /* right side */
-        if(!bnb::exists(head, idx, floorf(solution[idx]))) {
-            Node* node = bnb::new_constraint(idx, ceill(solution[idx]), false);
+        if(!bnb::exists(head, idx, ceil(solution[idx]))) {
+            Node* node = bnb::new_constraint(idx, ceil(solution[idx]), false);
             n_insert(mode, node, bnb::insidx);
             bnb::branch(head, variables, general, optimal);
             n_delete(mode, bnb::insidx);
