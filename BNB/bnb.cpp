@@ -1,7 +1,9 @@
 #include "bnb.hpp"
 
 bool bnb::minimize;
+bool bnb::maxReached = false;
 int bnb::insidx;
+int const bnb::maxDepth = 50;
 
 void bnb::bnb(Node* head, Variables* variables, const char* path) {
     ivec general;
@@ -16,7 +18,7 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
         }
     }
 
-    bnb::branch(head, variables, general, optimal);
+    bnb::branch(head, variables, general, optimal, 0);
     if(optimal.empty()) {
         printf("Error: unable to find mixed integer solution\n");
         return;
@@ -35,7 +37,13 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
     fclose(fptr);
 }
 
-void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &optimal) {
+void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &optimal, int depth) {
+    if(depth > bnb::maxDepth) {
+        if(maxReached) return;
+        printf("Warning: branch limit reached - results may be unoptimal\n");
+        maxReached = true; return;
+    }
+
     fvec solution = simplex::bnb(head, variables);
     if(solution.empty()) return;
 
@@ -66,14 +74,14 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
         if(!bnb::exists(head, idx, floor(solution[idx]))) {
             Node* node = bnb::new_constraint(idx, floor(solution[idx]), true);
             n_insert(mode, node, bnb::insidx);
-            bnb::branch(head, variables, general, optimal);
+            bnb::branch(head, variables, general, optimal, depth + 1);
             n_delete(mode, bnb::insidx);
         }
         /* right side */
         if(!bnb::exists(head, idx, ceil(solution[idx]))) {
             Node* node = bnb::new_constraint(idx, ceil(solution[idx]), false);
             n_insert(mode, node, bnb::insidx);
-            bnb::branch(head, variables, general, optimal);
+            bnb::branch(head, variables, general, optimal, depth + 1);
             n_delete(mode, bnb::insidx);
         }
     }
