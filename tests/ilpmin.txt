@@ -6,7 +6,3 @@ Constrain
     x2 <= 5.5;
 General
     x1; x2;
-Solution
-	x1  =    2.00;
-	x2  =    5.00;
-	Z   =   27.00;

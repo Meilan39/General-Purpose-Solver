@@ -5,64 +5,36 @@ file
     └── nonlinear expression
         └── nonlinear additive
             ├── nonlinear multiplicative |positive|
-            │   ├── nonlinear exponential |product|
-            │   │   └── nonlinear primary
-            │   │       └── real number
-            │   │           └── rational
-            │   │               └── number {2.000000}
-            │   └── nonlinear multiplicative suffix
-            │       └── nonlinear exponential |product|
-            │           ├── nonlinear primary
-            │           │   └── variable
-            │           │       └── variable {0.000000}
-            │           └── nonlinear exponential suffix
-            │               └── nonlinear primary
-            │                   └── real number
-            │                       └── rational
-            │                           └── number {2.000000}
-            ├── nonlinear additive suffix
-            │   └── nonlinear multiplicative |positive|
-            │       ├── nonlinear exponential |product|
-            │       │   └── nonlinear primary
-            │       │       └── nonlinear parenthesis
-            │       │           └── nonlinear expression
-            │       │               └── nonlinear additive
-            │       │                   ├── nonlinear multiplicative |positive|
-            │       │                   │   └── nonlinear exponential |product|
-            │       │                   │       ├── nonlinear primary
-            │       │                   │       │   └── real number
-            │       │                   │       │       └── irrational
-            │       │                   │       │           └── e
-            │       │                   │       └── nonlinear exponential suffix
-            │       │                   │           └── nonlinear primary
-            │       │                   │               └── real number
-            │       │                   │                   └── rational
-            │       │                   │                       └── number {2.000000}
-            │       │                   └── nonlinear additive suffix
-            │       │                       └── nonlinear multiplicative |positive|
-            │       │                           └── nonlinear exponential |product|
-            │       │                               └── nonlinear primary
-            │       │                                   └── real number
-            │       │                                       └── rational
-            │       │                                           └── number {1.000000}
-            │       └── nonlinear multiplicative suffix
-            │           └── nonlinear exponential |quotient|
-            │               └── nonlinear primary
-            │                   └── real number
-            │                       └── rational
-            │                           └── number {4.000000}
+            │   └── nonlinear exponential |product|
+            │       ├── nonlinear primary
+            │       │   └── nonlinear parenthesis
+            │       │       └── nonlinear expression
+            │       │           └── nonlinear additive
+            │       │               ├── nonlinear multiplicative |positive|
+            │       │               │   └── nonlinear exponential |product|
+            │       │               │       └── nonlinear primary
+            │       │               │           └── variable
+            │       │               │               └── variable {0.000000}
+            │       │               └── nonlinear additive suffix
+            │       │                   └── nonlinear multiplicative |positive|
+            │       │                       └── nonlinear exponential |product|
+            │       │                           └── nonlinear primary
+            │       │                               └── real number
+            │       │                                   └── rational
+            │       │                                       └── number {1.000000}
+            │       └── nonlinear exponential suffix
+            │           └── nonlinear primary
+            │               └── real number
+            │                   └── rational
+            │                       └── number {2.000000}
             └── nonlinear additive suffix
                 └── nonlinear multiplicative |positive|
                     └── nonlinear exponential |product|
-                        └── nonlinear primary
-                            └── functions
-                                └── log
-                                    ├── number {2.000000}
-                                    └── nonlinear expression
-                                        └── nonlinear additive
-                                            └── nonlinear multiplicative |positive|
-                                                └── nonlinear exponential |product|
-                                                    └── nonlinear primary
-                                                        └── real number
-                                                            └── rational
-                                                                └── number {10.000000}
+                        ├── nonlinear primary
+                        │   └── variable
+                        │       └── variable {1.000000}
+                        └── nonlinear exponential suffix
+                            └── nonlinear primary
+                                └── real number
+                                    └── rational
+                                        └── number {2.000000}
