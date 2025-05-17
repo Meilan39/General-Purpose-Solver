@@ -45,7 +45,15 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
     }
 
     fvec solution = simplex::bnb(head, variables);
-    if(solution.empty()) return;
+    if(solution.empty()) {
+        return;
+    }
+
+    if(!optimal.empty()) {
+        if(cmp(solution.back(), bnb::minimize ? ">=" : "<=" ,optimal.back())) {
+            return;
+        }
+    }
 
     double diffmax = 0;
     int idx = -1;
@@ -60,6 +68,7 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
     }
 
     if(idx == -1) {
+        printf("%d : adding %lf\n", depth, solution.back());
         if(optimal.empty()) {
             optimal = solution; 
             return;
@@ -71,14 +80,14 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
     } else {
         Node* mode = head->next[0];
         /* left side */
-        if(!bnb::exists(head, idx, floor(solution[idx]))) {
+        if(!bnb::exists(head, idx, floor(solution[idx]), true)) {
             Node* node = bnb::new_constraint(idx, floor(solution[idx]), true);
             n_insert(mode, node, bnb::insidx);
             bnb::branch(head, variables, general, optimal, depth + 1);
             n_delete(mode, bnb::insidx);
         }
         /* right side */
-        if(!bnb::exists(head, idx, ceil(solution[idx]))) {
+        if(!bnb::exists(head, idx, ceil(solution[idx]), false)) {
             Node* node = bnb::new_constraint(idx, ceil(solution[idx]), false);
             n_insert(mode, node, bnb::insidx);
             bnb::branch(head, variables, general, optimal, depth + 1);
@@ -88,10 +97,11 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
 }
 
 /* dangerous function */
-bool bnb::exists(Node* head, int idx, double number) {
+bool bnb::exists(Node* head, int idx, double number, bool left) {
     for(int i = bnb::insidx; head->next[0]->next[i]->type != lt_general; i++) {
         Node* constraint = head->next[0]->next[i];
-        if((cmp(constraint->next[0]->next[0]->next[0]->value,"==",idx)) ||
+        if((cmp(constraint->next[0]->next[0]->next[0]->value,"==",idx)) &&
+            constraint->next[1]->type == (left ? lt_leq : lt_geq) &&
            (cmp(constraint->next[2]->next[0]->next[0]->next[0]->next[0]->value,"==",number))) {
             return true;
         }

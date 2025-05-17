@@ -14,7 +14,7 @@ namespace bnb {
 
     void bnb(Node* head, Variables* variables, const char* path);
     void branch(Node* head, Variables* variables, const ivec &general, fvec &optimal, int depth);
-    bool exists(Node* head, int idx, double number);
+    bool exists(Node* head, int idx, double number, bool left);
     Node* new_constraint(int idx, double number, bool left);
 }
 

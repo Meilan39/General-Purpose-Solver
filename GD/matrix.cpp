@@ -26,7 +26,7 @@ Matrix Matrix::T() const {
 }
 
 double Matrix::norm() const {
-    int sum = 0;
+    double sum = 0;
     for(int r = 0; r < this->row; r++)
         for(int c = 0; c < this->col; c++)
             sum += this->mat[r][c] * this->mat[r][c];
@@ -58,49 +58,47 @@ void Matrix::print() const {
 }
 
 Matrix operator+(const Matrix& A, const Matrix& B) {
-    if(((A.row != B.row) || (A.col != B.col)) ||
-        (((A.row!=1) || (A.col!=1)) && ((B.row!=1) || (B.col!=1)))
-        ) return Matrix(0, 0, false);
+    bool unit = (A.row==1 && A.col==1) || (B.row==1 && B.col==1);
+    if(((A.row != B.row) || (A.col != B.col)) && !unit) return Matrix(0, 0, false);
     Matrix R (max(A.row, B.row), max(A.col, B.col), false);
     double a, b;
     for(int r = 0; r < R.row; r++) {
         for(int c = 0; c < R.col; c++) {
-            a = ((A.row==1)||(A.col==1)) ? A.at(0, 0) : A.at(r, c);
-            b = ((B.row==1)||(B.col==1)) ? B.at(0, 0) : B.at(r, c);
+            a = (A.row==1 && A.col==1) ? A.at(0, 0) : A.at(r, c);
+            b = (B.row==1 && B.col==1) ? B.at(0, 0) : B.at(r, c);
             R.at(r, c) = a + b;
         }
     }
     return R;
 }
 Matrix operator-(const Matrix& A, const Matrix& B) {
-    if(((A.row != B.row) || (A.col != B.col)) ||
-        (((A.row!=1) || (A.col!=1)) && ((B.row!=1) || (B.col!=1)))
-        ) return Matrix(0, 0, false);
+    bool unit = (A.row==1 && A.col==1) || (B.row==1 && B.col==1);
+    if(((A.row != B.row) || (A.col != B.col)) && !unit) return Matrix(0, 0, false);
     Matrix R (max(A.row, B.row), max(A.col, B.col), false);
     double a, b;
     for(int r = 0; r < R.row; r++) {
         for(int c = 0; c < R.col; c++) {
-            a = ((A.row==1)||(A.col==1)) ? A.at(0, 0) : A.at(r, c);
-            b = ((B.row==1)||(B.col==1)) ? B.at(0, 0) : B.at(r, c);
+            a = (A.row==1 && A.col==1) ? A.at(0, 0) : A.at(r, c);
+            b = (B.row==1 && B.col==1) ? B.at(0, 0) : B.at(r, c);
             R.at(r, c) = a - b;
         }
     }
     return R;
 }
 Matrix operator*(const Matrix& A, const Matrix& B) {
-    bool unit = ((A.row!=1) || (A.col!=1)) && ((B.row!=1) || (B.col!=1));
-    if((A.col != B.row) && unit) return Matrix(0, 0, false);
+    bool unit = (A.row==1 && A.col==1) || (B.row==1 && B.col==1);
+    if((A.col != B.row) && !unit) return Matrix(0, 0, false);
     double a, b;
-    Matrix R (unit ? A.row : max(A.row, B.row), unit ? B.col : max(A.col, B.col), false);
+    Matrix R (!unit ? A.row : max(A.row, B.row), !unit ? B.col : max(A.col, B.col), false);
     for(int r = 0; r < R.row; r++) {
         for(int c = 0; c < R.col; c++) {
-            if(unit) {
-                for(int k = 0; k < R.row; k++) {
+            if(!unit) {
+                for(int k = 0; k < A.col; k++) { // A.col or B.row
                     R.at(r, c) += A.at(r, k) * B.at(k, c);
                 }
             } else {
-                a = ((A.row==1)||(A.col==1)) ? A.at(0, 0) : A.at(r, c);
-                b = ((B.row==1)||(B.col==1)) ? B.at(0, 0) : B.at(r, c);
+                a = (A.row==1 && A.col==1) ? A.at(0, 0) : A.at(r, c);
+                b = (B.row==1 && B.col==1) ? B.at(0, 0) : B.at(r, c);
                 R.at(r, c) = a * b;
             }
         }
@@ -109,14 +107,14 @@ Matrix operator*(const Matrix& A, const Matrix& B) {
 }
 /* only for scaler * matrix */
 Matrix operator/(const Matrix& A, const Matrix& B) {
-    if(((A.row!=1) || (A.col!=1)) && ((B.row!=1) || (B.col!=1)))
-        return Matrix(0, 0, false); 
+    bool unit = (A.row==1 && A.col==1) || (B.row==1 && B.col==1);
+    if(!unit) return Matrix(0, 0, false); 
     double a, b;
     Matrix R (max(A.row, B.row), max(A.col, B.col), false);
     for(int r = 0; r < R.row; r++) {
         for(int c = 0; c < R.col; c++) {
-            a = ((A.row==1)||(A.col==1)) ? A.at(0, 0) : A.at(r, c);
-            b = ((B.row==1)||(B.col==1)) ? B.at(0, 0) : B.at(r, c);
+            a = (A.row==1 && A.col==1) ? A.at(0, 0) : A.at(r, c);
+            b = (B.row==1 && B.col==1) ? B.at(0, 0) : B.at(r, c);
             R.at(r, c) = a / b;
         }
     }

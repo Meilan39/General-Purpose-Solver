@@ -27,9 +27,7 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
     if(gd::gradient(F, xk, gk) == -1) return;
 
     while(depth < gd::maxDepth && gk.norm() > gd::gradTolerance) {
-        for(int r = 0; r < xk.row; r++) 
-            printf("%lf ", xk.at(r, 0));
-        printf("\n");
+        xk.T().print(); // to remove
         /* step direction and size */
         pk = -Hk * gk;
         if(gd::line_search(F, xk, pk, gk, ak) == -1) return;
@@ -45,6 +43,7 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
                 - (Hk * yk * sk.T() + sk * yk.T() * Hk) / skyk;
         depth++;
     }
+    xk.T().print(); // to remove
 }
 
 int gd::init(Node* F, Matrix &xk) {

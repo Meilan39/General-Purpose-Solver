@@ -44,10 +44,16 @@ t : return 1;
 }
 int c_decimal(char** s) {
     char* ps = *s;
-    if(!c_compare(s, c_nonzero, 9)) goto f;
+    if(!c_compare(s, c_nonzero, 9)) goto c2;
     while(c_digit(s));
-    if(!c_compare(s, c_period, 1)) goto f;
+    if(!c_compare(s, c_period, 1)) goto c2;
     while(c_digit(s));  
+    goto t;
+c2: *s = ps;
+    if(!c_compare(s, c_zero, 1)) goto f;
+    if(!c_compare(s, c_period, 1)) goto f;
+    if(!c_digit(s)) goto f;
+    while(c_digit(s)); 
     goto t;
 f : *s = ps;
     return 0;
