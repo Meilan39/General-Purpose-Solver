@@ -4,13 +4,13 @@ gd::Flag gd::flag;
 
 const double gd::h = 1e-6;
 int gd::maxDepth = 20;
-int gd::maxBracketDepth = 10;
+int gd::maxSearchDepth = 10;
 int gd::maxZoomDepth = 10;
 bool gd::minimize = false;
 double gd::gradTolerance = 1e-4;
-Matrix gd::c1 (1e-4); 
-Matrix gd::c2 (0.9);
-Matrix gd::tau (0.5); 
+Matrix gd::a1 (0.9); 
+Matrix gd::a2 (1e-4);
+Matrix gd::bmax (0.5); 
 
 void gd::gd(Node* head, Variables* variables, const char* path) {
     gd::minimize = head->next[0]->next[0]->type == lt_minimize;
@@ -71,61 +71,63 @@ int gd::gradient(Node* F, const Matrix &xk, Matrix &gk) {
 E:  return -1;
 }
 
-/* backtracking with Armijo's condition f(X) - f(X + aP) >= -acm (m = Pt grad(f(X))) */
 int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &ak) {
-    Matrix gal = gk, gar = gk, ga = gk;
-    Matrix al (0), ar (0.5); // start from 0, 1
-    int depth;
+    int depth = 0;
+    double f0, fb, fbp;
+    Matrix g0 = gk, gb = gk, gbl = gk;
+    Matrix b(0), bp = b;
+    if(gd::evaluate(F, xk, f0) == -1) goto E;
+    while(depth < gd::maxSearchDepth) {
+        bp = b; 
+        b = 0.5 * (b + gd::bmax);
 
-    if(!cmp(gar.at(0, 0),"<",0)) goto E; // gd*pk >= 0
+        if(gd::evaluate(F, xk + b*pk, fb) == -1) goto E;
+        if(gd::evaluate(F, xk + bp*pk, fbp) == -1) goto E;
+        if(gd::gradient(F, xk + b*pk, gb) == -1) goto E; 
 
-    depth = 0;
-    while(depth < gd::maxBracketDepth && cmp(gar.at(0, 0),"<",0)) {
-        al.at(0, 0) = ar.at(0, 0);
-        ar.at(0, 0) *= 2;
-        gal = gar;
-        if(gd::gradient(F, xk + ar * pk, gar) == -1) goto E;
-        depth++;
-    }
-    
-    depth = 0;
-    while(depth < gd::maxZoomDepth) {
-        bool armijo, wolfe;
-        ak = (ar + al) * 0.5; // bisect
-        if(gd::gradient(F, xk + ak*pk, ga) == -1) goto E;
-
-        double fx, fxap;
-        Matrix xap = xk + ak*pk;
-        Matrix dk = pk.T();
-        Matrix adg = ak*dk*gk;
-        Matrix gxap = gk;
-        gd::evaluate(F, xk, fx);
-        gd::evaluate(F, xap, fxap);
-        gd::gradient(F, xap, gxap);
-        armijo = (fxap <= fx + (c1 * adg).at(0, 0));
-        wolfe = (abs((dk*gxap).at(0, 0)) <= abs((c2*adg).at(0, 0)));
-        
-        if(!armijo) {
-            ar = ak;
-        } else {
-            if(wolfe) break;
-            if(cmp(ga.at(0, 0),"<",0)) {
-                al = ak;
-                gal = ga;
-            } else {
-                ar = ak;
-                gar = ga;
-            }
+        if((fb > f0 + (a1*b*g0.T()*pk).at(0,0)) || (fb >= fbp)) {
+            if(gd::zoom(F, xk, pk, gk, bp, b, ak) == -1) goto E;
+            break;
+        } 
+        if(abs((gb.T()*pk).at(0,0)) <= abs((gd::a2*g0.T()*pk).at(0, 0))) {
+            ak = b;
+            break;
+        }
+        if((gb.T()*pk).at(0,0) >= 0) {
+            if(gd::zoom(F, xk, pk, gk, b, gd::bmax, ak) == -1) goto E;
+            break;
         }
     }
-    // double fx, fxap;
-    // Matrix cm = -gd::c * pk.T() * gk; // 1x1
-    // ak.at(0, 0) = 2; // init a0 = 1
-    // do {
-    //     ak = gd::tau * ak;
-    //     if(gd::evaluate(F, xk, fx) == -1) goto E;
-    //     if(gd::evaluate(F, xk + ak * pk, fxap) == -1) goto E;
-    // } while(fx - fxap < (cm * ak).at(0, 0));
+    return 0;
+E:  return -1;
+}
+
+int gd::zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &bl, Matrix &br, Matrix& ak) {
+    int depth = 0; 
+    double f0, fb, fbl;
+    Matrix g0 = gk, gb = gk, gbl = gk;
+    Matrix b(0);
+    if(gd::evaluate(F, xk, f0) == -1) goto E;
+    while(depth < gd::maxZoomDepth) {
+        b = 0.5 * (bl + br);
+        if(gd::evaluate(F, xk + b*pk, fb) == -1) goto E;
+        if(gd::evaluate(F, xk + bl*pk, fbl) == -1) goto E;
+        if(gd::gradient(F, xk + b*pk, gb) == -1) goto E;
+        if(gd::gradient(F, xk + bl*pk, gbl) == -1) goto E;
+        if((fb > f0 + (gd::a1*b*g0.T()*pk).at(0, 0)) || (fb >= fbl)) {
+            br = b;
+        } else {
+            if(abs((gb.T()*pk).at(0,0)) <= abs((gd::a2*g0.T()*pk).at(0, 0))) {
+                ak = b;
+                break;
+            }
+            if(((br-bl)*(gbl.T()*pk)).at(0, 0) >= 0) {
+                br = bl;
+            }
+            bl = br;
+        }
+        depth++;
+    }
     return 0;
 E:  return -1;
 }
@@ -249,3 +251,74 @@ int gd::functions(Node* head, const Matrix &replace, double &value) {
     return 0;
 E:  return -1;
 }
+
+/*
+int gd::zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &bl, Matrix &br, Matrix& ak) {
+    int depth = 0; 
+    double f0, fb, fbl;
+    Matrix g0 = gk, gb = gk;
+    if(gd::evaluate(F, xk, f0) == -1) goto E;
+    while(depth < gd::maxZoomDepth) {
+        Matrix b = 0.5 * (bl + br);
+        if(gd::evaluate(F, xk + b*pk, fb) == -1) goto E;
+        if(gd::evaluate(F, xk + bl*pk, fbl) == -1) goto E;
+        if(gd::gradient(F, xk + b*pk, gb) == -1) goto E;
+
+        // Armijo condition check
+        if(fb > f0 + gd::a1*b*(g0.T()*pk).at(0,0) || fb >= fbl) {
+            br = b;
+        } else {
+            // Check curvature condition
+            if(std::abs((gb.T()*pk).at(0,0) <= gd::a2 * std::abs((g0.T()*pk).at(0,0)) {
+                ak = b; // Assign the found step
+                break;
+            }
+            // Update interval based on gradient at b
+            if((gb.T()*pk).at(0,0) >= 0) {
+                br = b;
+            } else {
+                bl = b;
+            }
+        }
+        depth++;
+    }
+    return 0;
+E:  return -1;
+}
+
+int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &ak) {
+    int depth = 0;
+    double f0, fb, fbp;
+    Matrix g0 = gk, gb;
+    Matrix b(0), bp;
+
+    if(gd::evaluate(F, xk, f0) == -1) return -1;
+
+    while(depth < gd::maxSearchDepth) {
+        bp = b; 
+        b = 0.5 * (b + gd::bmax);
+
+        if(gd::evaluate(F, xk + b*pk, fb) == -1 || 
+           gd::evaluate(F, xk + bp*pk, fbp) == -1 ||
+           gd::gradient(F, xk + b*pk, gb) == -1) return -1;
+        // Check Armijo or if fb not better than previous
+        if(fb > f0 + gd::a1*b*(g0.T()*pk).at(0,0) || fb >= fbp) {
+            if(gd::zoom(F, xk, pk, gk, bp, b, ak) == -1) return -1;
+            break; // Exit after zoom
+        }
+        // Check curvature condition
+        if(std::abs((gb.T()*pk).at(0,0)) <= gd::a2 * std::abs((g0.T()*pk).at(0,0))) {
+            ak = b;
+            break;
+        }
+        // Check gradient sign for interval update
+        if((gb.T()*pk).at(0,0) >= 0) {
+            if(gd::zoom(F, xk, pk, gk, bp, b, ak) == -1) return -1;
+            break; // Exit after zoom
+        }
+        depth++;
+    }
+    return 0;
+}
+
+*/
