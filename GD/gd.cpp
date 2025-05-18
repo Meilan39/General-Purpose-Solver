@@ -4,9 +4,12 @@ gd::Flag gd::flag;
 
 const double gd::h = 1e-6;
 int gd::maxDepth = 20;
+int gd::maxBracketDepth = 10;
+int gd::maxZoomDepth = 10;
 bool gd::minimize = false;
-double gd::gradTolerance = 1;
-Matrix gd::c (1e-4); 
+double gd::gradTolerance = 1e-4;
+Matrix gd::c1 (1e-4); 
+Matrix gd::c2 (0.9);
 Matrix gd::tau (0.5); 
 
 void gd::gd(Node* head, Variables* variables, const char* path) {
@@ -27,9 +30,8 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
     if(gd::gradient(F, xk, gk) == -1) return;
 
     while(depth < gd::maxDepth && gk.norm() > gd::gradTolerance) {
-        xk.T().print(); // to remove
         /* step direction and size */
-        pk = -Hk * gk;
+        pk = -gk; // -Hk * gk;
         if(gd::line_search(F, xk, pk, gk, ak) == -1) return;
         sk = ak * pk;
         /* step */
@@ -42,8 +44,9 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
         Hk = Hk + (skyk + yk.T() * Hk * yk) * (sk * sk.T()) / (skyk * skyk) 
                 - (Hk * yk * sk.T() + sk * yk.T() * Hk) / skyk;
         depth++;
+        xk.T().print();
+        printf("%lf\n", gk.norm());
     }
-    xk.T().print(); // to remove
 }
 
 int gd::init(Node* F, Matrix &xk) {
@@ -52,17 +55,17 @@ int gd::init(Node* F, Matrix &xk) {
     return 0;
 }
 
-int gd::gradient(Node* F, Matrix &xk, Matrix &gk) {
+int gd::gradient(Node* F, const Matrix &xk, Matrix &gk) {
     double temp, Fm, Fp, h2 = 2 * gd::h;
+    Matrix x = xk;
     for(int r = 0; r < gk.row; r++) {
-        /* xk is ultimately unchanged */
-        temp = xk.at(r, 0);
-        xk.at(r, 0) = temp + gd::h;
-        if(gd::evaluate(F, xk, Fp) == -1) goto E;
-        xk.at(r, 0) = temp - gd::h;
-        if(gd::evaluate(F, xk, Fm) == -1) goto E;
+        temp = x.at(r, 0);
+        x.at(r, 0) = temp + gd::h;
+        if(gd::evaluate(F, x, Fp) == -1) goto E;
+        x.at(r, 0) = temp - gd::h;
+        if(gd::evaluate(F, x, Fm) == -1) goto E;
         gk.at(r, 0) = (Fp - Fm) / h2;
-        xk.at(r, 0) = temp;
+        x.at(r, 0) = temp;
     }
     return 0;
 E:  return -1;
@@ -70,14 +73,59 @@ E:  return -1;
 
 /* backtracking with Armijo's condition f(X) - f(X + aP) >= -acm (m = Pt grad(f(X))) */
 int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &ak) {
-    double fx, fxap;
-    Matrix cm = -gd::c * pk.T() * gk; // 1x1
-    ak.at(0, 0) = 2; // init a0 = 1
-    do {
-        ak = gd::tau * ak;
-        if(gd::evaluate(F, xk, fx) == -1) goto E;
-        if(gd::evaluate(F, xk + ak * pk, fxap) == -1) goto E;
-    } while(fx - fxap < (cm * ak).at(0, 0));
+    Matrix gal = gk, gar = gk, ga = gk;
+    Matrix al (0), ar (0.5); // start from 0, 1
+    int depth;
+
+    if(!cmp(gar.at(0, 0),"<",0)) goto E; // gd*pk >= 0
+
+    depth = 0;
+    while(depth < gd::maxBracketDepth && cmp(gar.at(0, 0),"<",0)) {
+        al.at(0, 0) = ar.at(0, 0);
+        ar.at(0, 0) *= 2;
+        gal = gar;
+        if(gd::gradient(F, xk + ar * pk, gar) == -1) goto E;
+        depth++;
+    }
+    
+    depth = 0;
+    while(depth < gd::maxZoomDepth) {
+        bool armijo, wolfe;
+        ak = (ar + al) * 0.5; // bisect
+        if(gd::gradient(F, xk + ak*pk, ga) == -1) goto E;
+
+        double fx, fxap;
+        Matrix xap = xk + ak*pk;
+        Matrix dk = pk.T();
+        Matrix adg = ak*dk*gk;
+        Matrix gxap = gk;
+        gd::evaluate(F, xk, fx);
+        gd::evaluate(F, xap, fxap);
+        gd::gradient(F, xap, gxap);
+        armijo = (fxap <= fx + (c1 * adg).at(0, 0));
+        wolfe = (abs((dk*gxap).at(0, 0)) <= abs((c2*adg).at(0, 0)));
+        
+        if(!armijo) {
+            ar = ak;
+        } else {
+            if(wolfe) break;
+            if(cmp(ga.at(0, 0),"<",0)) {
+                al = ak;
+                gal = ga;
+            } else {
+                ar = ak;
+                gar = ga;
+            }
+        }
+    }
+    // double fx, fxap;
+    // Matrix cm = -gd::c * pk.T() * gk; // 1x1
+    // ak.at(0, 0) = 2; // init a0 = 1
+    // do {
+    //     ak = gd::tau * ak;
+    //     if(gd::evaluate(F, xk, fx) == -1) goto E;
+    //     if(gd::evaluate(F, xk + ak * pk, fxap) == -1) goto E;
+    // } while(fx - fxap < (cm * ak).at(0, 0));
     return 0;
 E:  return -1;
 }
