@@ -12,12 +12,13 @@ namespace gd {
     extern Flag flag;
 
     extern const double h; // (machine epsilon 1e-16)^{1/3}
-    extern int maxDepth;
-    extern int maxSearchDepth;
-    extern int maxZoomDepth;
+    extern const int maxDepth;
+    extern const int maxSearchDepth;
+    extern const int maxZoomDepth;
+    extern const double gradTolerance;
+    extern const double amax;
+    extern const double aepsilon;
     extern bool minimize;
-    extern double gradTolerance;
-    extern double amax;
     extern Matrix c1;
     extern Matrix c2;
 

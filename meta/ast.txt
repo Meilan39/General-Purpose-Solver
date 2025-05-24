@@ -12,21 +12,53 @@ file
         │       │           │       └── nonlinear primary
         │       │           │           └── real number
         │       │           │               └── rational
-        │       │           │                   └── number {1.000000}
-        │       │           └── nonlinear multiplicative |negative|
+        │       │           │                   └── decimal {1.500000}
+        │       │           ├── nonlinear multiplicative |negative|
+        │       │           │   └── nonlinear exponential |product|
+        │       │           │       └── nonlinear primary
+        │       │           │           └── variable {0.000000}
+        │       │           └── nonlinear multiplicative |positive|
+        │       │               ├── nonlinear exponential |product|
+        │       │               │   └── nonlinear primary
+        │       │               │       └── variable {0.000000}
         │       │               └── nonlinear exponential |product|
         │       │                   └── nonlinear primary
-        │       │                       └── variable {0.000000}
+        │       │                       └── variable {1.000000}
+        │       └── nonlinear primary
+        │           └── real number
+        │               └── rational
+        │                   └── number {2.000000}
+        ├── nonlinear multiplicative |positive|
+        │   └── nonlinear exponential |product|
+        │       ├── nonlinear primary
+        │       │   └── nonlinear parenthesis
+        │       │       └── nonlinear additive
+        │       │           ├── nonlinear multiplicative |positive|
+        │       │           │   └── nonlinear exponential |product|
+        │       │           │       └── nonlinear primary
+        │       │           │           └── real number
+        │       │           │               └── rational
+        │       │           │                   └── decimal {2.250000}
+        │       │           ├── nonlinear multiplicative |negative|
+        │       │           │   └── nonlinear exponential |product|
+        │       │           │       └── nonlinear primary
+        │       │           │           └── variable {0.000000}
+        │       │           └── nonlinear multiplicative |positive|
+        │       │               ├── nonlinear exponential |product|
+        │       │               │   └── nonlinear primary
+        │       │               │       └── variable {0.000000}
+        │       │               └── nonlinear exponential |product|
+        │       │                   ├── nonlinear primary
+        │       │                   │   └── variable {1.000000}
+        │       │                   └── nonlinear primary
+        │       │                       └── real number
+        │       │                           └── rational
+        │       │                               └── number {2.000000}
         │       └── nonlinear primary
         │           └── real number
         │               └── rational
         │                   └── number {2.000000}
         └── nonlinear multiplicative |positive|
-            ├── nonlinear exponential |product|
-            │   └── nonlinear primary
-            │       └── real number
-            │           └── rational
-            │               └── number {100.000000}
             └── nonlinear exponential |product|
                 ├── nonlinear primary
                 │   └── nonlinear parenthesis
@@ -34,15 +66,24 @@ file
                 │           ├── nonlinear multiplicative |positive|
                 │           │   └── nonlinear exponential |product|
                 │           │       └── nonlinear primary
-                │           │           └── variable {1.000000}
-                │           └── nonlinear multiplicative |negative|
+                │           │           └── real number
+                │           │               └── rational
+                │           │                   └── decimal {2.625000}
+                │           ├── nonlinear multiplicative |negative|
+                │           │   └── nonlinear exponential |product|
+                │           │       └── nonlinear primary
+                │           │           └── variable {0.000000}
+                │           └── nonlinear multiplicative |positive|
+                │               ├── nonlinear exponential |product|
+                │               │   └── nonlinear primary
+                │               │       └── variable {0.000000}
                 │               └── nonlinear exponential |product|
                 │                   ├── nonlinear primary
-                │                   │   └── variable {0.000000}
+                │                   │   └── variable {1.000000}
                 │                   └── nonlinear primary
                 │                       └── real number
                 │                           └── rational
-                │                               └── number {2.000000}
+                │                               └── number {3.000000}
                 └── nonlinear primary
                     └── real number
                         └── rational

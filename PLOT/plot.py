@@ -10,7 +10,8 @@ GT = 3 / 2
 def f(x, y):
     # return np.sin(x) + np.cos(y)
     # return (0.1 * x**4) + x**3 + (0.2 * y**2)
-    return (1 - x)**2 + 100 * (y - x**2)**2
+    # return (1 - x)**2 + 100 * (y - x**2)**2
+    return (1.5 - x + x*y)**2 + (2.25 - x + x*y**2)**2 + (2.625 - x + x*y**3)**2
 
 # === Load (x, y) points from file ===
 def load_path(filename):
@@ -28,17 +29,25 @@ def plot_surface_with_path(path_file, save_file=""):
     # center of graph
     avg_x = np.mean(path_x)
     avg_y = np.mean(path_y)
-    maxdev = np.max(abs(path_x - avg_x))
-    maxdev = max(maxdev, np.max(path_y - avg_y))
-    maxdev = maxdev * GT
+    avg_z = np.mean(path_z)
+    xydev = np.max(abs(path_x - avg_x))
+    xydev = max(xydev, np.max(path_y - avg_y))
+    xydev = xydev * GT
+    zdev  = np.max(abs(path_z - avg_z))
+    zdev  = zdev * GT
+
     # Create surface mesh
-    x_range = np.linspace(avg_x - maxdev, avg_x + maxdev, 50)
-    y_range = np.linspace(avg_y - maxdev, avg_y + maxdev, 50)
+    # x_range = np.linspace(avg_x - xydev, avg_x + xydev, 50)
+    # y_range = np.linspace(avg_y - xydev, avg_y + xydev, 50)
+    # X, Y = np.meshgrid(x_range, y_range)
+    # Z = f(X, Y)
+    # Z = np.where((Z < avg_z - zdev) | (Z > avg_z + zdev), np.nan, Z) 
+    # get surface mesh
+    x_range = np.linspace(-1.46678415, 6.216204749999999, 50)
+    y_range = np.linspace(-3.7098825, 3.9731064, 50)
     X, Y = np.meshgrid(x_range, y_range)
     Z = f(X, Y)
-    z_min = np.min(path_z) * GT
-    z_max = np.max(path_z) * GT
-    Z = np.where((Z < z_min) | (Z > z_max), np.nan, Z) 
+    Z = np.where((Z < -28.838043307735568) | (Z > 34.79935866154711), np.nan, Z) 
 
     # Plotting
     fig = plt.figure(figsize=(10, 7))
@@ -50,10 +59,15 @@ def plot_surface_with_path(path_file, save_file=""):
     # Path plot
     ax.plot(path_x, path_y, path_z, color='red', linewidth=2, marker='o', label='Descent Path')
 
+    # print graph range
+    print(f'X: {avg_x - xydev}, {avg_x + xydev}')  
+    print(f'Y: {avg_y - xydev}, {avg_y + xydev}')
+    print(f'Z: {avg_z -  zdev}, {avg_z +  zdev}')
+
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('f(x, y)')
-    ax.set_title('Gradient Descent Path on Surface')
+    ax.set_title('Gradient Descent Path')
     ax.legend()
     plt.tight_layout()
 

@@ -3,12 +3,13 @@
 gd::Flag gd::flag;
 
 const double gd::h = 1e-6;
-int gd::maxDepth = 20;
-int gd::maxSearchDepth = 10;
-int gd::maxZoomDepth = 10;
+const int gd::maxDepth = 100;
+const int gd::maxSearchDepth = 10;
+const int gd::maxZoomDepth = 20;
+const double gd::gradTolerance = 1e-4;
+const double gd::amax = 100;
+const double gd::aepsilon = 1e-3;
 bool gd::minimize = false;
-double gd::gradTolerance = 1e-4;
-double gd::amax = 100;
 Matrix gd::c1 (1e-3); 
 Matrix gd::c2 (0.9);
 
@@ -32,11 +33,15 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
     if(gd::init(F, xk) == -1) return;
     if(gd::gradient(F, xk, gk) == -1) return;
 
-    while(depth < gd::maxDepth && gk.norm() > gd::gradTolerance) {
+    while(cmp(gk.norm(),">",gd::gradTolerance)) {
+        if(depth > gd::maxDepth) {
+            printf("Error: max depth reached\n");
+            return;
+        }
         fprintf(dfile, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
         /* step direction and size */
-        // pk = -gk;
-        pk = -Hk * gk;
+        pk = -gk;
+        // pk = -Hk * gk;
         if(gd::line_search(F, xk, pk, gk, ak) == -1) {
             printf("Error: line search\n");
             return;
@@ -65,8 +70,8 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
 }
 
 int gd::init(Node* F, Matrix &xk) {
-    xk.at(0,0) = -1.2;
-    xk.at(1,0) = 1;
+    xk.at(0,0) = 0.6;
+    xk.at(1,0) = -2;
     return 0;
 }
 
@@ -89,17 +94,19 @@ E:  return -1;
 int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &ak) {
     int depth = 0;
     double f0, fa = 0, fap = 0, gaf;
+    double ainit = 1 / max(gd::aepsilon, pk.norm()); // epsilon for divide by zero
+    double amax = gd::amax * ainit; // amax is gd::amax * 1 / pk.norm()
     Matrix p = pk.T(); // transpose directional vector
     Matrix g0 = p * gk, ga = gk;
-    Matrix a(0), ap(0);
+    Matrix a(0), ap(0); 
     if(gd::evaluate(F, xk, f0) == -1) goto E;
 
     while(true) {
         if(depth > gd::maxSearchDepth) goto E;
 
         ap = a; fap = fa;
-        a = (depth != 0) ? (2.0 * a) : (1);
-        if(a.at(0,0) > gd::amax) goto E;
+        a = (depth != 0) ? (2.0 * a) : (ainit);
+        if(a.at(0,0) > amax) goto E;
         if(gd::evaluate(F, xk + a*pk, fa) == -1) goto E;
 
         if((fa > f0 + (c1*a*g0).at(0,0)) || (fa >= fap && depth != 0)) {
