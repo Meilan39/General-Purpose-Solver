@@ -8,13 +8,16 @@ int gd::maxSearchDepth = 10;
 int gd::maxZoomDepth = 10;
 bool gd::minimize = false;
 double gd::gradTolerance = 1e-4;
-Matrix gd::a1 (0.9); 
-Matrix gd::a2 (1e-4);
-Matrix gd::bmax (0.5); 
+double gd::amax = 100;
+Matrix gd::c1 (1e-3); 
+Matrix gd::c2 (0.9);
 
 void gd::gd(Node* head, Variables* variables, const char* path) {
     gd::minimize = head->next[0]->next[0]->type == lt_minimize;
     Node* F = head->next[0]->next[1];
+
+    FILE* dfile = fopen("./PLOT/plot.txt", "w");
+    if(dfile == NULL) { printf("debug file not-found\n"); return; }
 
     int depth = 0;
     Matrix Hk(variables->len, variables->len, true);
@@ -30,28 +33,40 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
     if(gd::gradient(F, xk, gk) == -1) return;
 
     while(depth < gd::maxDepth && gk.norm() > gd::gradTolerance) {
+        fprintf(dfile, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
         /* step direction and size */
-        pk = -gk; // -Hk * gk;
-        if(gd::line_search(F, xk, pk, gk, ak) == -1) return;
+        // pk = -gk;
+        pk = -Hk * gk;
+        if(gd::line_search(F, xk, pk, gk, ak) == -1) {
+            printf("Error: line search\n");
+            return;
+        }
         sk = ak * pk;
         /* step */
         xk = xk + sk;
-        /* next gradient, update hessian */
-        if(gd::gradient(F, xk, gt) == -1) return;
+        /* update hessian */
+        if(gd::gradient(F, xk, gt) == -1) {
+            printf("Error: gradient\n");
+            return;
+        }
         yk = gt - gk;
-        gk = gt;
         skyk = sk.T() * yk;
+        if(depth == 0) Hk = Hk * (skyk / (yk.T() * yk));
+
         Hk = Hk + (skyk + yk.T() * Hk * yk) * (sk * sk.T()) / (skyk * skyk) 
                 - (Hk * yk * sk.T() + sk * yk.T() * Hk) / skyk;
+        /* update */
+        gk = gt;
         depth++;
-        xk.T().print();
-        printf("%lf\n", gk.norm());
     }
+
+    fprintf(dfile, "%lf %lf\n", xk.at(0,0), xk.at(1,0)); 
+    fclose(dfile);
 }
 
 int gd::init(Node* F, Matrix &xk) {
-    for(int r = 0; r < xk.row; r++)
-        xk.at(r, 0) = 1;
+    xk.at(0,0) = -1.2;
+    xk.at(1,0) = 1;
     return 0;
 }
 
@@ -73,58 +88,70 @@ E:  return -1;
 
 int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &ak) {
     int depth = 0;
-    double f0, fb, fbp;
-    Matrix g0 = gk, gb = gk, gbl = gk;
-    Matrix b(0), bp = b;
+    double f0, fa = 0, fap = 0, gaf;
+    Matrix p = pk.T(); // transpose directional vector
+    Matrix g0 = p * gk, ga = gk;
+    Matrix a(0), ap(0);
     if(gd::evaluate(F, xk, f0) == -1) goto E;
-    while(depth < gd::maxSearchDepth) {
-        bp = b; 
-        b = 0.5 * (b + gd::bmax);
 
-        if(gd::evaluate(F, xk + b*pk, fb) == -1) goto E;
-        if(gd::evaluate(F, xk + bp*pk, fbp) == -1) goto E;
-        if(gd::gradient(F, xk + b*pk, gb) == -1) goto E; 
+    while(true) {
+        if(depth > gd::maxSearchDepth) goto E;
 
-        if((fb > f0 + (a1*b*g0.T()*pk).at(0,0)) || (fb >= fbp)) {
-            if(gd::zoom(F, xk, pk, gk, bp, b, ak) == -1) goto E;
-            break;
-        } 
-        if(abs((gb.T()*pk).at(0,0)) <= abs((gd::a2*g0.T()*pk).at(0, 0))) {
-            ak = b;
+        ap = a; fap = fa;
+        a = (depth != 0) ? (2.0 * a) : (1);
+        if(a.at(0,0) > gd::amax) goto E;
+        if(gd::evaluate(F, xk + a*pk, fa) == -1) goto E;
+
+        if((fa > f0 + (c1*a*g0).at(0,0)) || (fa >= fap && depth != 0)) {
+            if(gd::zoom(F, xk, pk, gk, ap, a, ak) == -1) goto E;
             break;
         }
-        if((gb.T()*pk).at(0,0) >= 0) {
-            if(gd::zoom(F, xk, pk, gk, b, gd::bmax, ak) == -1) goto E;
+
+        if(gd::gradient(F, xk + a*pk, ga) == -1) goto E; 
+        gaf = (p * ga).at(0,0); // pk.T() * ga
+
+        if(abs(gaf) <= (-gd::c2 * g0).at(0,0)) {
+            ak = a;
             break;
         }
+        if(gaf >= 0) {
+            if(gd::zoom(F, xk, pk, gk, a, ap, ak) == -1) goto E;
+            break;
+        }
+        depth++;
     }
     return 0;
 E:  return -1;
 }
 
-int gd::zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &bl, Matrix &br, Matrix& ak) {
+int gd::zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &al, Matrix &ar, Matrix& ak) {
     int depth = 0; 
-    double f0, fb, fbl;
-    Matrix g0 = gk, gb = gk, gbl = gk;
-    Matrix b(0);
+    double f0, fa, fal, gaf;
+    Matrix p = pk.T(); // transpose of unit directional vector
+    Matrix g0 = p*gk, ga = gk;
+    Matrix a(0);
     if(gd::evaluate(F, xk, f0) == -1) goto E;
-    while(depth < gd::maxZoomDepth) {
-        b = 0.5 * (bl + br);
-        if(gd::evaluate(F, xk + b*pk, fb) == -1) goto E;
-        if(gd::evaluate(F, xk + bl*pk, fbl) == -1) goto E;
-        if(gd::gradient(F, xk + b*pk, gb) == -1) goto E;
-        if(gd::gradient(F, xk + bl*pk, gbl) == -1) goto E;
-        if((fb > f0 + (gd::a1*b*g0.T()*pk).at(0, 0)) || (fb >= fbl)) {
-            br = b;
-        } else {
-            if(abs((gb.T()*pk).at(0,0)) <= abs((gd::a2*g0.T()*pk).at(0, 0))) {
-                ak = b;
+    while(true) {
+        if(depth > gd::maxZoomDepth) goto E;
+
+        a = 0.5 * (al + ar);
+        if(gd::evaluate(F, xk + a*pk, fa) == -1) goto E;
+        if(gd::evaluate(F, xk + al*pk, fal) == -1) goto E;
+        
+        if((fa > f0 + (gd::c1*a*g0).at(0, 0)) || (fa >= fal)) {
+            ar = a;
+        } else {        
+            if(gd::gradient(F, xk + a*pk, ga) == -1) goto E;
+            gaf = (p * ga).at(0,0);
+
+            if(abs(gaf) <= (-gd::c2 * g0).at(0, 0)) {
+                ak = a;
                 break;
             }
-            if(((br-bl)*(gbl.T()*pk)).at(0, 0) >= 0) {
-                br = bl;
+            if(gaf * (ar - al).at(0,0) >= 0) {
+                ar = al;
             }
-            bl = br;
+            al = a;
         }
         depth++;
     }

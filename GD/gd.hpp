@@ -17,16 +17,16 @@ namespace gd {
     extern int maxZoomDepth;
     extern bool minimize;
     extern double gradTolerance;
-    extern Matrix a1;
-    extern Matrix a2;
-    extern Matrix bmax;
+    extern double amax;
+    extern Matrix c1;
+    extern Matrix c2;
 
     void gd(Node* head, Variables* variables, const char* path);
 
     int init(Node* F, Matrix &xk);
     int gradient(Node* F, const Matrix &xk, Matrix &gk);
     int line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix& gk, Matrix &ak);
-    int zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &bl, Matrix &br, Matrix& ak) {
+    int zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &bl, Matrix &br, Matrix& ak);
 
     int evaluate(Node* head, const Matrix &replace, double& value);
     int additive(Node* head, const Matrix &replace, double& value);
@@ -34,7 +34,6 @@ namespace gd {
     int exponential(Node* head, const Matrix &replace, double& value);
     int primary(Node* head, const Matrix &replace, double& value);
     int functions(Node* head, const Matrix &replace, double& value);
-
 }
 
 #endif

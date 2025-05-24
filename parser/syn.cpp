@@ -129,6 +129,7 @@ Node* s_linear_additive_suffix(Token** token, int depth) {
     PRINTMAP(depth, "linear additive suffix", token)
     Node* node = n_construct(nt_linear_additive_suffix, 0);
     Token* ptoken = *token;
+    s_minus_flag = 0; // could be a problem
     if(!s_compare(token, lt_plus)) goto c2; s_minus_flag = 0;
     if(!n_push(node, s_linear_multiplicative(token, depth+1))) goto c2;
     goto t;
@@ -187,6 +188,7 @@ Node* s_nonlinear_additive_suffix(Token** token, int depth) {
     PRINTMAP(depth, "nonlinear additive suffix", token)
     Node* node = n_construct(nt_nonlinear_additive_suffix, 0);
     Token* ptoken = *token;
+    s_minus_flag = 0;
     if(!s_compare(token, lt_plus)) goto c2; s_minus_flag = 0;
     if(!n_push(node, s_nonlinear_multiplicative(token, depth+1))) goto c2;
     goto t;

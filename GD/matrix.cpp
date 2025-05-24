@@ -105,12 +105,12 @@ Matrix operator*(const Matrix& A, const Matrix& B) {
     }
     return R;
 }
-/* only for scaler * matrix */
+/* element wise division, same conditions as addition and subtraction */
 Matrix operator/(const Matrix& A, const Matrix& B) {
     bool unit = (A.row==1 && A.col==1) || (B.row==1 && B.col==1);
-    if(!unit) return Matrix(0, 0, false); 
-    double a, b;
+    if(((A.row != B.row) || (A.col != B.col)) && !unit) return Matrix(0, 0, false);
     Matrix R (max(A.row, B.row), max(A.col, B.col), false);
+    double a, b;
     for(int r = 0; r < R.row; r++) {
         for(int c = 0; c < R.col; c++) {
             a = (A.row==1 && A.col==1) ? A.at(0, 0) : A.at(r, c);

@@ -6,18 +6,58 @@ file
         └── nonlinear additive
             ├── nonlinear multiplicative |positive|
             │   └── nonlinear exponential |product|
-            │       └── nonlinear primary
-            │           └── functions
-            │               └── sin
-            │                   └── nonlinear primary
-            │                       └── variable
-            │                           └── variable {0.000000}
+            │       ├── nonlinear primary
+            │       │   └── nonlinear parenthesis
+            │       │       └── nonlinear expression
+            │       │           └── nonlinear additive
+            │       │               ├── nonlinear multiplicative |positive|
+            │       │               │   └── nonlinear exponential |product|
+            │       │               │       └── nonlinear primary
+            │       │               │           └── real number
+            │       │               │               └── rational
+            │       │               │                   └── number {1.000000}
+            │       │               └── nonlinear additive suffix
+            │       │                   └── nonlinear multiplicative |negative|
+            │       │                       └── nonlinear exponential |product|
+            │       │                           └── nonlinear primary
+            │       │                               └── variable
+            │       │                                   └── variable {0.000000}
+            │       └── nonlinear exponential suffix
+            │           └── nonlinear primary
+            │               └── real number
+            │                   └── rational
+            │                       └── number {2.000000}
             └── nonlinear additive suffix
                 └── nonlinear multiplicative |positive|
-                    └── nonlinear exponential |product|
-                        └── nonlinear primary
-                            └── functions
-                                └── cos
-                                    └── nonlinear primary
-                                        └── variable
-                                            └── variable {1.000000}
+                    ├── nonlinear exponential |product|
+                    │   └── nonlinear primary
+                    │       └── real number
+                    │           └── rational
+                    │               └── number {100.000000}
+                    └── nonlinear multiplicative suffix
+                        └── nonlinear exponential |product|
+                            ├── nonlinear primary
+                            │   └── nonlinear parenthesis
+                            │       └── nonlinear expression
+                            │           └── nonlinear additive
+                            │               ├── nonlinear multiplicative |positive|
+                            │               │   └── nonlinear exponential |product|
+                            │               │       └── nonlinear primary
+                            │               │           └── variable
+                            │               │               └── variable {1.000000}
+                            │               └── nonlinear additive suffix
+                            │                   └── nonlinear multiplicative |negative|
+                            │                       └── nonlinear exponential |product|
+                            │                           ├── nonlinear primary
+                            │                           │   └── variable
+                            │                           │       └── variable {0.000000}
+                            │                           └── nonlinear exponential suffix
+                            │                               └── nonlinear primary
+                            │                                   └── real number
+                            │                                       └── rational
+                            │                                           └── number {2.000000}
+                            └── nonlinear exponential suffix
+                                └── nonlinear primary
+                                    └── real number
+                                        └── rational
+                                            └── number {2.000000}
