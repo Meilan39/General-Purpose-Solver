@@ -27,8 +27,8 @@ int Tableau::solve() {
     return 0;
 }
 
-std::vector<double> Tableau::solution(bool verbose) {
-    int end = this->column - this->artificial - 1 - (verbose ? 0 : this->slack);
+std::vector<double> Tableau::solution() {
+    int end = this->column - this->artificial - 1;
     std::vector<double> ret (end + 1);
     for(int c = 0; c < end; c++) { 
         bool basic = true;

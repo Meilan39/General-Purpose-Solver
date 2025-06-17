@@ -59,6 +59,7 @@ Node* s_tan(Token** token, int depth);
 Node* s_linear_constraint(Token** token, int depth);
 Node* s_nonlinear_constraint(Token** token, int depth);
 Node* s_variable_constraint(Token** token, int depth);
+Node* s_variable_bound(Token** token, int depth);
 Node* s_real(Token** token, int depth);
 Node* s_rational(Token** token, int depth);
 Node* s_irrational(Token** token, int depth);

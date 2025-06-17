@@ -1,63 +1,138 @@
 #include "gd.hpp"
 
 gd::Flag gd::flag;
+FILE* gd::fplot = NULL;
+FILE* gd::fsample = NULL;
 
 const double gd::h = 1e-6;
 const int gd::maxDepth = 100;
 const int gd::maxSearchDepth = 10;
 const int gd::maxZoomDepth = 20;
+const double gd::sampleDensity = 3; // samples per unit volume
 const double gd::gradTolerance = 1e-4;
+const double gd::sampleThreshold = 1e-2;
+const double gd::clusterThreshold = 0.5;
+const double gd::overlapThreshold = 1e-1;
 const double gd::amax = 100;
 const double gd::aepsilon = 1e-3;
 bool gd::minimize = false;
 Matrix gd::c1 (1e-3); 
 Matrix gd::c2 (0.9);
+Matrix gd::half (0.5);
 
-void gd::gd(Node* head, Variables* variables, const char* path) {
+void gd::gd(Node* head, Variables* variables, const std::string &path) {
+    fplot = fopen("./PLOT/plot.txt", "w");
+    fsample = fopen("./PLOT/sample.txt", "w");
+    if(fplot == NULL) { printf("Debug: plot file not-found\n"); return; }
+    if(fsample == NULL) { printf("Debug: sample file not-found\n"); return; }
+
     gd::minimize = head->next[0]->next[0]->type == lt_minimize;
     Node* F = head->next[0]->next[1];
 
-    FILE* dfile = fopen("./PLOT/plot.txt", "w");
-    if(dfile == NULL) { printf("debug file not-found\n"); return; }
+    uniform Udist;
+    std::vector<Bound> bounds(variables->len);
+    std::vector<uniform> dists(variables->len, Udist);
 
+    /* read bound information */
+    double sampleVolume = 1;
+    for(int i = 3; i < head->next[0]->length; i++) {
+        Node* next = head->next[0]->next[i];
+        Bound bound = {n_get_value(next->next[0]), n_get_value(next->next[2])};
+        sampleVolume *= abs(bound.max - bound.min);
+        bounds[n_get_value(next->next[1])] = bound;
+        dists[n_get_value(next->next[1])] = uniform(bound.min, bound.max);
+    }
+    /* check for incorrectly bounded variables */
+    bool unbounded = false;
+    for(size_t i = 0; i < dists.size(); i++) {
+        if(dists[i] == Udist) {
+            printf("Error: %s is unbounded\n", variables->arr[i]);
+            unbounded = true;
+        }
+    } if(unbounded) return;
+
+    int sampleSize = sampleVolume * gd::sampleDensity;
+    std::vector<std::tuple<Matrix, double, int>> minima;
+    std::vector<gd::Point> points = gd::mesh(head, variables, dists, sampleSize);
+    minima.reserve(sampleSize);
+
+    for(auto point : points) {
+        double minimum;
+        bool cluster = false;
+        if(BFGS(F, variables, point, bounds) == -1) continue;
+        for(auto m : minima) {
+            if(cmp((std::get<0>(m) - point.xk).norm(),">",gd::overlapThreshold)) continue;
+            cluster = true;
+            std::get<2>(m)++;
+            break;
+        }
+        if(cluster) continue;
+        gd::evaluate(F, point.xk, minimum);
+        minima.emplace_back(std::make_tuple(point.xk, minimum, 1));
+    }
+
+    /* no solution */
+    if(minima.empty()) {
+        printf("Warning: No solutions found\n");
+        return;
+    }
+
+    /* sort minimums */
+    std::sort(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
+        return std::get<2>(a) > std::get<2>(b);
+    });
+
+    std::string sol = path;
+    sol.replace(sol.rfind('.'), sol.back(), ".sol");
+    FILE* fptr = fopen(sol.c_str(), "w");
+
+    if(fptr == NULL) {
+        printf("Error: unable to open %s\n", path.c_str());
+        return;
+    }
+    fprintf(fptr, "Solution file for: %s\n\n", path.c_str());
+    for(size_t i = 0; i < minima.size(); i++) {
+        fprintf(fptr, "%s Optimum : %lf\n", i ? "Local" : "Global", std::get<1>(minima[i]));
+        for(int j = 0; j < variables->len; j++)
+            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
+        fprintf(fptr, "\n");
+    }
+    fclose(fptr);
+
+    fclose(fplot);
+    fclose(fsample);
+}
+
+int gd::BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bounds) {
     int depth = 0;
+    Matrix &xk = point.xk;
+    Matrix &gk = point.gk;
     Matrix Hk(variables->len, variables->len, true);
-    Matrix gk(variables->len, 1, false);
-    Matrix gt(variables->len, 1, false);
     Matrix pk(variables->len, 1, false);
+    Matrix gt(variables->len, 1, false);
     Matrix sk(variables->len, 1, false);
     Matrix yk(variables->len, 1, false);
-    Matrix xk(variables->len, 1, false);
-    Matrix ak(0);
     Matrix skyk(0);
-    if(gd::init(F, xk) == -1) return;
-    if(gd::gradient(F, xk, gk) == -1) return;
+    Matrix ak(0);
 
     while(cmp(gk.norm(),">",gd::gradTolerance)) {
-        if(depth > gd::maxDepth) {
-            printf("Error: max depth reached\n");
-            return;
-        }
-        fprintf(dfile, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
-        /* step direction and size */
-        pk = -gk;
-        // pk = -Hk * gk;
-        if(gd::line_search(F, xk, pk, gk, ak) == -1) {
-            printf("Error: line search\n");
-            return;
-        }
+        if(depth > gd::maxDepth) goto E;
+        fprintf(fplot, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
+        /* step direction */
+        // pk = -gk;
+        pk = -Hk * gk;
+        /* step size */
+        if(gd::line_search(F, xk, pk, gk, ak) == -1) goto E;
         sk = ak * pk;
         /* step */
         xk = xk + sk;
-        /* update hessian */
-        if(gd::gradient(F, xk, gt) == -1) {
-            printf("Error: gradient\n");
-            return;
-        }
+        if(gd::outbound(bounds, xk)) goto E; 
+        /* pre-update */
+        if(gd::gradient(F, xk, gt) == -1) goto E;
         yk = gt - gk;
         skyk = sk.T() * yk;
         if(depth == 0) Hk = Hk * (skyk / (yk.T() * yk));
-
+        /* update hessian */
         Hk = Hk + (skyk + yk.T() * Hk * yk) * (sk * sk.T()) / (skyk * skyk) 
                 - (Hk * yk * sk.T() + sk * yk.T() * Hk) / skyk;
         /* update */
@@ -65,14 +140,59 @@ void gd::gd(Node* head, Variables* variables, const char* path) {
         depth++;
     }
 
-    fprintf(dfile, "%lf %lf\n", xk.at(0,0), xk.at(1,0)); 
-    fclose(dfile);
+    fprintf(fplot, "\n");
+    return 0;
+E:  fprintf(fplot, "\n");
+    return -1;
 }
 
-int gd::init(Node* F, Matrix &xk) {
-    xk.at(0,0) = 0.6;
-    xk.at(1,0) = -2;
-    return 0;
+std::vector<gd::Point> gd::mesh(Node* head, Variables* variables, std::vector<uniform> dists, int sampleSize) {
+    Node* F = head->next[0]->next[1];
+    std::vector<gd::Point> points; 
+    points.reserve(sampleSize); 
+    /* initialize uniform-real mersenne twister */
+    std::random_device rd;
+    std::mt19937 MT (rd());
+
+    for(int i = 0; i < sampleSize; i++) {
+        gd::Point point (variables->len);
+
+        /* generate random N-d coordinate */
+        for(size_t j = 0; j < dists.size(); j++)
+            point.xk.at(j,0) = dists[j](MT);        
+        
+        /* discard if gradient is uncomputable */
+        if(gd::gradient(F, point.xk, point.gk) == -1) continue;
+        point.gnorm = point.gk.norm();
+
+        /* discard if gradient is almost flat */
+        if(cmp(point.gnorm,"<",gd::sampleThreshold)) continue; 
+
+        /* cluster if adjacent */
+        Matrix t (variables->len, 1, false);
+        bool cluster = false;
+        for(size_t j = 0; j < points.size(); j++) {
+            t = points[j].xk - point.xk;
+            if(t.norm() * max(points[j].gnorm, point.gnorm) < gd::clusterThreshold) {
+                points[j].xk = half * (points[j].xk + point.xk);
+                cluster = true; 
+                break;
+            }
+        } 
+        if(cluster) continue;
+
+        fprintf(fsample, "%lf %lf\n\n", point.xk.at(0,0), point.xk.at(1,0));
+        points.emplace_back(point);
+    }
+
+    return points;
+}
+
+bool gd::outbound(const std::vector<Bound> &bounds, const Matrix &xk) {
+    for(size_t i = 0; i < bounds.size(); i++) {
+        if(cmp(xk.at(i, 0),"<",bounds[i].min) || cmp(bounds[i].max,"<",xk.at(i, 0)))
+            return true;
+    } return false;
 }
 
 int gd::gradient(Node* F, const Matrix &xk, Matrix &gk) {

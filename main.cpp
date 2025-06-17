@@ -9,13 +9,8 @@
 #include "GD/gd.hpp"
 
 int main(int argc, char *argv[]) {
-    bool v = false;
-    if(argc == 1) printf("Error: file path unspecified\n");
-    if(argc >  2) {
-        for(int i = 2; i < argc; i++) {
-            if(strcmp(argv[2], "-v") == 0) v = true;
-        }
-    }
+    if(argc == 1) { printf("Error: file path unspecified\n"); return 0; }
+    if(argc >  2) { printf("Error: too many arguments\n"); return 0; }
     // open file
     FILE *fptr = fopen(argv[1], "r");
     if(fptr == NULL) { printf("Error: unable to open file\n"); return 1; } 
@@ -28,7 +23,7 @@ int main(int argc, char *argv[]) {
     n_simplify(head);
     // solve
     switch(head->next[0]->type) {
-        case nt_lp: simplex::simplex(head, tokens->variables, argv[1], v); break;
+        case nt_lp: simplex::simplex(head, tokens->variables, argv[1]); break;
         case nt_ilp: bnb::bnb(head, tokens->variables, argv[1]); break;
         case nt_unlp: gd::gd(head, tokens->variables, argv[1]); break;
         case nt_cnlp:

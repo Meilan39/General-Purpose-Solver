@@ -16,6 +16,7 @@ class Matrix {
  public:
     Matrix(int r, int c, bool identity);
     Matrix(double constant);
+    Matrix();
     Matrix T() const;
     double norm() const;
     double  at(int r, int c) const;

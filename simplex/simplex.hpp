@@ -7,7 +7,7 @@
 
 namespace simplex {
 
-    void simplex(Node* head, Variables* variables, const char* path, bool verbose); 
+    void simplex(Node* head, Variables* variables, const std::string &path); 
 
     /* @brief simplex solver or bnb algorithm   */
     /* @return                                  */

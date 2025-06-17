@@ -87,7 +87,8 @@ const l_Map l_map[] = {
     {"Maximize", lt_maximize},
     {"Minimize", lt_minimize},
     {"Constrain", lt_constrain},
-    {"General", lt_general},
+    {"Integer", lt_integer},
+    {"Bound", lt_bound},
     {"Solution", lt_solution},
     /* functions */
     {"root", lt_root},

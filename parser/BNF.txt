@@ -5,11 +5,13 @@
 
 <ilp> ::= <objective> <linear_expression> ;
           Constrain {<linear_constraint>}* 
-          General {<variable_constraint}*
+          Integer {<variable_constraint}*
 
 <unlp> ::= <objective> <nonlinear_expression> ;
+           Bound {<variable_bound>}*
 
 <cnlp> ::= <objective> <nonlinear_expression> ;
+           Bound {<variable_bound>}*
            Constrain {<nonlinear_constraint>}*
 
 /* ---------------------- linear ----------------------- */
@@ -70,6 +72,8 @@
 <nonlinear_constraint> ::= <nonlinear_expression> <comparsion> <nonlinear_expression> ;
 
 <variable_constraint> ::= <variable> ;
+
+<variable_bound> ::= <real_number> < <variable> < <real_number> ;
 
 <real_number> ::= <rational> | <irrational>
 

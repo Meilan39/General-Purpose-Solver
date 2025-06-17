@@ -18,7 +18,7 @@ public:
 public:
   Tableau(Node* head, Variables* variables);
   int solve();
-  std::vector<double> solution(bool verbose);
+  std::vector<double> solution();
 private:
   int get_pivot(std::pair<int, int> &piv, int obj_row);
   bool optimal(int obj_row);

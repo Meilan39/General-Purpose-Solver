@@ -35,7 +35,8 @@ typedef enum l_Types {
     lt_maximize,
     lt_minimize,
     lt_constrain,
-    lt_general,
+    lt_integer,
+    lt_bound,
     lt_solution,
     /* fuinctions */
     lt_root,

@@ -17,6 +17,12 @@ Matrix::Matrix(double constant) {
     this->mat = std::vector<std::vector<double>>(1, std::vector<double>(1, constant));
 }
 
+Matrix::Matrix() {
+    this->row = 0;
+    this->col = 0;
+    this->mat = std::vector<std::vector<double>>(0, std::vector<double>(0));
+}
+
 Matrix Matrix::T() const { 
     Matrix R = *this;
     R.transpose = !R.transpose;

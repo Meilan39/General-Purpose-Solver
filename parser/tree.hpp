@@ -65,6 +65,7 @@ enum n_Types {
    nt_linear_constraint,
    nt_nonlinear_constraint,
    nt_variable_constraint,
+   nt_variable_bound,
    nt_functions,
    nt_root,
    nt_sqrt,

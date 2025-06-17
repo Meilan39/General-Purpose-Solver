@@ -12,7 +12,7 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
     bnb::minimize = mode->next[0]->type == lt_minimize;
 
     for(int i = 0; i < mode->length; i++) {
-        if(mode->next[i]->type == lt_general) insidx = i;
+        if(mode->next[i]->type == lt_integer) insidx = i;
         if(mode->next[i]->type == nt_variable_constraint) {
             general.push_back(mode->next[i]->next[0]->value);
         }
@@ -25,15 +25,18 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
     }
 
     /* print solution */
-    FILE* fptr = fopen(path, "a");
+    std::string sol = path;
+    sol.replace(sol.find('.'), sol.back(), ".sol");
+    FILE* fptr = fopen(sol.c_str(), "w");
+    
     if(fptr == NULL) {
         printf("Error: unable to open file");
         return;
     }
-    fprintf(fptr, "\nSolution\n");
+    fprintf(fptr, "Solution file for : %s\n\n", path);
+    fprintf(fptr, "Optimum : %lf\n", optimal.back());
     for(int i = 0; i < (int)(optimal.size()-1); i++) 
         fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[i], optimal[i]);
-    fprintf(fptr, "\t%-3s = %7.2f;\n", "Z", optimal.back());
     fclose(fptr);
 }
 
@@ -98,7 +101,7 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
 
 /* dangerous function */
 bool bnb::exists(Node* head, int idx, double number, bool left) {
-    for(int i = bnb::insidx; head->next[0]->next[i]->type != lt_general; i++) {
+    for(int i = bnb::insidx; head->next[0]->next[i]->type != lt_integer; i++) {
         Node* constraint = head->next[0]->next[i];
         if((cmp(constraint->next[0]->next[0]->next[0]->value,"==",idx)) &&
             constraint->next[1]->type == (left ? lt_leq : lt_geq) &&

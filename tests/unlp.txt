@@ -1,2 +1,5 @@
 Maximize 
-   (1.5 - x + x*y)^2 + (2.25 - x + x*y^2)^2 + (2.625 - x + x*y^3)^2;
+   sin x + cos y;
+Bound
+   0 < x < 10;
+   0 < y < 10;
