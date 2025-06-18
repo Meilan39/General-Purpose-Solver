@@ -451,11 +451,15 @@ Node* s_variable_bound(Token** token, int depth) {
     PRINTMAP(depth, "variable bound", token)
     Node* node = n_construct(nt_variable_bound, 0);
     Token* ptoken = *token;
+    s_minus_flag = 0; s_sign(token, depth+1);
     if(!n_push(node, s_real(token, depth+1))) goto f;
+    node->next[0]->subtype = s_minus_flag ? 2 : 1;
     if(!s_compare(token, lt_less)) goto f;
     if(!n_push(node, s_variable(token, depth+1))) goto f;
     if(!s_compare(token, lt_less)) goto f;
+    s_minus_flag = 0; s_sign(token, depth+1);
     if(!n_push(node, s_real(token, depth+1))) goto f;
+    node->next[2]->subtype = s_minus_flag ? 2 : 1;
     if(!s_compare(token, lt_semicolon)) goto f;
     goto t;
 f : *token = ptoken;

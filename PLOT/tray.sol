@@ -1,3 +1,9 @@
+Minimize
+   -0.0001(sin(x)sin(y)e^(100 - sqrt(x^2+y^2)/pi) + 1)^(0.1);
+Bound
+   0 < x < 10;
+   0 < y < 10;
+
 Solution file for: ./tests/unlp.txt
 
 Optimum : -3.152630 {Convergence : 20%}

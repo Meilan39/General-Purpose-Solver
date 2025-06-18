@@ -51,11 +51,11 @@
 
 <functions> ::= <root> | <sqrt> | <log> | <sqrt> | <log> | <ln> | <sin> | <cos> | <tan> 
 
-<root> ::= root ( <number> , <expression> )
+<root> ::= root ( <number> , <nonlinear_additive> )
 
 <sqrt> ::= sqrt <nonlinear_primary>
 
-<log> ::= log ( <number> , <expression> )
+<log> ::= log ( <number> , <nonlinear_additive> )
 
 <ln> ::= ln <nonlinear_primary>
 
@@ -73,7 +73,7 @@
 
 <variable_constraint> ::= <variable> ;
 
-<variable_bound> ::= <real_number> < <variable> < <real_number> ;
+<variable_bound> ::= {<sign>}? <real_number> < <variable> < {<sign>}? <real_number> ;
 
 <real_number> ::= <rational> | <irrational>
 

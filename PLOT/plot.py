@@ -6,7 +6,8 @@ GT = 3 / 2
 
 # === Define the function to plot ===
 def f(x, y):
-    return np.sin(x) + np.cos(y)
+    # return np.sin(x) + np.cos(y)
+    return (-0.0001) * (np.sin(x) * np.sin(y) * np.exp(100 - np.sqrt(x**2 + y**2)/np.pi))**(0.1)
     # return (0.1 * x**4) + x**3 + (0.2 * y**2)
     # return (1 - x)**2 + 100 * (y - x**2)**2
     # return (1.5 - x + x*y)**2 + (2.25 - x + x*y**2)**2 + (2.625 - x + x*y**3)**2

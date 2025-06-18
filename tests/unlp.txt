@@ -1,5 +1,5 @@
-Maximize 
-   sin x + cos y;
+Minimize
+   -0.0001(sin(x)sin(y)e^(100 - sqrt(x^2+y^2)/pi) + 1)^(0.1);
 Bound
    0 < x < 10;
    0 < y < 10;

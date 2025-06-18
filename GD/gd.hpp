@@ -37,7 +37,7 @@ namespace gd {
     extern const double sampleThreshold; // sampling condition for gradient
     extern const double clusterThreshold; // clustering condition for diff * grad
     extern const double overlapThreshold;
-    extern const double amax; //  
+    extern const double amax;
     extern const double aepsilon;
     extern bool minimize;
     extern Matrix c1;
@@ -47,7 +47,7 @@ namespace gd {
     void gd(Node* head, Variables* variables, const std::string& path);
     int BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bounds);
 
-    std::vector<Point> mesh(Node* head, Variables* variables, std::vector<uniform> dists, int sampleSize);
+    std::vector<Point> mesh(Node* F, Variables* variables, std::vector<uniform> dists, int sampleSize);
     bool outbound(const std::vector<Bound> &bounds, const Matrix &xk);
 
     int gradient(Node* F, const Matrix &xk, Matrix &gk);

@@ -37,7 +37,8 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
     double sampleVolume = 1;
     for(int i = 3; i < head->next[0]->length; i++) {
         Node* next = head->next[0]->next[i];
-        Bound bound = {n_get_value(next->next[0]), n_get_value(next->next[2])};
+        Bound bound = {n_get_value(next->next[0]) * (next->next[0]->subtype==2 ? -1 : 1), 
+                       n_get_value(next->next[2]) * (next->next[2]->subtype==2 ? -1 : 1)};
         sampleVolume *= abs(bound.max - bound.min);
         bounds[n_get_value(next->next[1])] = bound;
         dists[n_get_value(next->next[1])] = uniform(bound.min, bound.max);
@@ -53,14 +54,14 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
 
     int sampleSize = sampleVolume * gd::sampleDensity;
     std::vector<std::tuple<Matrix, double, int>> minima;
-    std::vector<gd::Point> points = gd::mesh(head, variables, dists, sampleSize);
+    std::vector<gd::Point> points = gd::mesh(F, variables, dists, sampleSize);
     minima.reserve(sampleSize);
 
-    for(auto point : points) {
+    for(auto &point : points) {
         double minimum;
         bool cluster = false;
         if(BFGS(F, variables, point, bounds) == -1) continue;
-        for(auto m : minima) {
+        for(auto &m : minima) {
             if(cmp((std::get<0>(m) - point.xk).norm(),">",gd::overlapThreshold)) continue;
             cluster = true;
             std::get<2>(m)++;
@@ -79,7 +80,7 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
 
     /* sort minimums */
     std::sort(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
-        return std::get<2>(a) > std::get<2>(b);
+        return std::get<1>(a) < std::get<1>(b);
     });
 
     std::string sol = path;
@@ -92,7 +93,8 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
     }
     fprintf(fptr, "Solution file for: %s\n\n", path.c_str());
     for(size_t i = 0; i < minima.size(); i++) {
-        fprintf(fptr, "%s Optimum : %lf\n", i ? "Local" : "Global", std::get<1>(minima[i]));
+        fprintf(fptr, "Optimum : %lf {Convergence : %zu%%}\n", std::get<1>(minima[i]),
+                                        100 * std::get<2>(minima[i]) / points.size());
         for(int j = 0; j < variables->len; j++)
             fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
         fprintf(fptr, "\n");
@@ -126,7 +128,7 @@ int gd::BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bo
         sk = ak * pk;
         /* step */
         xk = xk + sk;
-        if(gd::outbound(bounds, xk)) goto E; 
+        if(gd::outbound(bounds, xk)) goto E;
         /* pre-update */
         if(gd::gradient(F, xk, gt) == -1) goto E;
         yk = gt - gk;
@@ -146,8 +148,7 @@ E:  fprintf(fplot, "\n");
     return -1;
 }
 
-std::vector<gd::Point> gd::mesh(Node* head, Variables* variables, std::vector<uniform> dists, int sampleSize) {
-    Node* F = head->next[0]->next[1];
+std::vector<gd::Point> gd::mesh(Node* F, Variables* variables, std::vector<uniform> dists, int sampleSize) {
     std::vector<gd::Point> points; 
     points.reserve(sampleSize); 
     /* initialize uniform-real mersenne twister */
@@ -168,7 +169,7 @@ std::vector<gd::Point> gd::mesh(Node* head, Variables* variables, std::vector<un
         /* discard if gradient is almost flat */
         if(cmp(point.gnorm,"<",gd::sampleThreshold)) continue; 
 
-        /* cluster if adjacent */
+        /* cluster if proximal */
         Matrix t (variables->len, 1, false);
         bool cluster = false;
         for(size_t j = 0; j < points.size(); j++) {
@@ -225,7 +226,7 @@ int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &g
         if(depth > gd::maxSearchDepth) goto E;
 
         ap = a; fap = fa;
-        a = (depth != 0) ? (2.0 * a) : (ainit);
+        a = (depth == 0) ? (ainit) : (2.0 * a);
         if(a.at(0,0) > amax) goto E;
         if(gd::evaluate(F, xk + a*pk, fa) == -1) goto E;
 
@@ -245,6 +246,7 @@ int gd::line_search(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &g
             if(gd::zoom(F, xk, pk, gk, a, ap, ak) == -1) goto E;
             break;
         }
+        
         depth++;
     }
     return 0;
@@ -280,6 +282,7 @@ int gd::zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matr
             }
             al = a;
         }
+        
         depth++;
     }
     return 0;
@@ -346,7 +349,7 @@ int gd::primary(Node* head, const Matrix &replace, double &value) {
             if(gd::additive(next->next[0], replace, value) == -1) goto E;
             break;
         default:
-            printf("default\n");
+            printf("%d default\n", head->type);
     }
     return 0;
 E:  return -1;
@@ -363,7 +366,7 @@ int gd::functions(Node* head, const Matrix &replace, double &value) {
             }
             break;
         case nt_sqrt:
-            if(gd::additive(head->next[0], replace, expression) == -1) goto E;
+            if(gd::primary(head->next[0], replace, expression) == -1) goto E;
             a = sqrt(expression);
             if(!isfinite(a)) { flag = gd_overflow; goto E; }
             break;

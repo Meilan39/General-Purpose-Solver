@@ -20,13 +20,13 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
 
     bnb::branch(head, variables, general, optimal, 0);
     if(optimal.empty()) {
-        printf("Error: unable to find mixed integer solution\n");
+        printf("Error: unable to find solution\n");
         return;
     }
 
     /* print solution */
     std::string sol = path;
-    sol.replace(sol.find('.'), sol.back(), ".sol");
+    sol.replace(sol.rfind('.'), sol.back(), ".sol");
     FILE* fptr = fopen(sol.c_str(), "w");
     
     if(fptr == NULL) {
@@ -35,7 +35,7 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
     }
     fprintf(fptr, "Solution file for : %s\n\n", path);
     fprintf(fptr, "Optimum : %lf\n", optimal.back());
-    for(int i = 0; i < (int)(optimal.size()-1); i++) 
+    for(int i = 0; i < variables->len; i++) 
         fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[i], optimal[i]);
     fclose(fptr);
 }
@@ -43,7 +43,7 @@ void bnb::bnb(Node* head, Variables* variables, const char* path) {
 void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &optimal, int depth) {
     if(depth > bnb::maxDepth) {
         if(maxReached) return;
-        printf("Warning: branch limit reached - results may be unoptimal\n");
+        printf("Warning: branch limit exceeded - results may be unoptimal\n");
         maxReached = true; return;
     }
 
@@ -71,7 +71,7 @@ void bnb::branch(Node* head, Variables* variables, const ivec &general, fvec &op
     }
 
     if(idx == -1) {
-        printf("%d : adding %lf\n", depth, solution.back());
+        // printf("%d : adding %lf\n", depth, solution.back());
         if(optimal.empty()) {
             optimal = solution; 
             return;
