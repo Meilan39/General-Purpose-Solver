@@ -1,22 +1,10 @@
 Solution file for: ./tests/unlp.txt
 
-Optimum : -3.152630 {Convergence : 20%}
-	x   =    8.08;
-	y   =    8.08;
+Optimum : -2.000000 {Convergence : 19%}
+	x   =    4.71;
+	y   =    3.14;
 
-Optimum : -2.856509 {Convergence : 13%}
-	x   =    1.63;
-	y   =    8.16;
-
-Optimum : -2.856509 {Convergence : 13%}
-	x   =    8.16;
-	y   =    1.63;
-
-Optimum : -2.736872 {Convergence : 16%}
-	x   =    4.93;
-	y   =    4.93;
-
-Optimum : -2.375943 {Convergence : 14%}
-	x   =    1.79;
-	y   =    1.79;
+Optimum : -2.000000 {Convergence : 7%}
+	x   =    4.71;
+	y   =    9.42;
 

@@ -295,6 +295,7 @@ const char* const n_typtostr_map[nt_terminator] = {
     [nt_linear_constraint] = "linear constraint",
     [nt_nonlinear_constraint] = "nonlinear constraint",
     [nt_variable_constraint] = "variable constraint",
+    [nt_equality_constraint] = "equality constraint",
     [nt_variable_bound] = "variable bound",
     [nt_functions] = "functions",
     [nt_root] = "root",

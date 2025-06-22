@@ -10,6 +10,7 @@
 
 namespace gd {
     using uniform = std::uniform_real_distribution<>;
+    using Minima = std::tuple<Matrix, double, int>;
 
     struct Bound {
         double min;
@@ -21,6 +22,11 @@ namespace gd {
         double gnorm;
         Point(int len) : xk(len, 1, false), gk(len, 1, false) {}
     };
+    struct Penalty {
+        Node* function;
+        double multiplier;
+    };
+
     /// @brief 
     typedef enum {gd_overflow, gd_invalid_root, gd_invalid_log} Flag; 
     extern Flag flag;
@@ -36,15 +42,27 @@ namespace gd {
     extern const double gradTolerance; // terminating condition for gradient norm
     extern const double sampleThreshold; // sampling condition for gradient
     extern const double clusterThreshold; // clustering condition for diff * grad
-    extern const double overlapThreshold;
-    extern const double amax;
-    extern const double aepsilon;
-    extern bool minimize;
+    extern const double overlapThreshold; // clustering condition for norm difference of minimas
+    extern const double amax; // largest a value in line search
+    extern const double aepsilon; // divide by zero prevention in line search
+    extern bool maximize; // evaluation is minus when true
+    extern int sampleSize; 
     extern Matrix c1;
     extern Matrix c2;
     extern Matrix half;
 
+    extern const double augmentedDensity; // sample size for N-d mesh
+    extern const double penaltyTolerance;
+    extern const double minit;
+    extern const int maxAugmentDepth;
+    extern bool AL; // augmented lagrangian for evaulation
+    extern double r;
+    extern std::vector<Penalty> penalties;
+
     void gd(Node* head, Variables* variables, const std::string& path);
+    void al(Node* head, Variables* variables, const std::string& path);
+
+    std::vector<Minima> solve(Node* head, Variables* variables);
     int BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bounds);
 
     std::vector<Point> mesh(Node* F, Variables* variables, std::vector<uniform> dists, int sampleSize);
@@ -55,6 +73,7 @@ namespace gd {
     int zoom(Node* F, const Matrix &xk, const Matrix &pk, const Matrix &gk, Matrix &bl, Matrix &br, Matrix& ak);
 
     int evaluate(Node* head, const Matrix &replace, double& value);
+    int resolve(Node* head, const Matrix &replace, double& value);
     int additive(Node* head, const Matrix &replace, double& value);
     int multiplicative(Node* head, const Matrix &replace, double& value);
     int exponential(Node* head, const Matrix &replace, double& value);

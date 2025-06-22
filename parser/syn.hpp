@@ -10,6 +10,7 @@ extern FILE* s_syntax_depth_map;
 
 extern int s_minus_flag;
 extern int s_divide_flag;
+extern int s_variable_flag;
 
 #define DEPTHMAP 1
 #ifdef DEPTHMAP
@@ -60,6 +61,7 @@ Node* s_linear_constraint(Token** token, int depth);
 Node* s_nonlinear_constraint(Token** token, int depth);
 Node* s_variable_constraint(Token** token, int depth);
 Node* s_variable_bound(Token** token, int depth);
+Node* s_equality_constraint(Token** token, int depth);
 Node* s_real(Token** token, int depth);
 Node* s_rational(Token** token, int depth);
 Node* s_irrational(Token** token, int depth);

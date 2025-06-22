@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         case nt_lp: simplex::simplex(head, tokens->variables, argv[1]); break;
         case nt_ilp: bnb::bnb(head, tokens->variables, argv[1]); break;
         case nt_unlp: gd::gd(head, tokens->variables, argv[1]); break;
-        case nt_cnlp:
+        case nt_cnlp: gd::al(head, tokens->variables, argv[1]); break;
         default: break;
     }
 E:  // close file

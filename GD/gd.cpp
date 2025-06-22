@@ -15,20 +15,142 @@ const double gd::clusterThreshold = 0.5;
 const double gd::overlapThreshold = 1e-1;
 const double gd::amax = 100;
 const double gd::aepsilon = 1e-3;
-bool gd::minimize = false;
+bool gd::maximize = false;
+int gd::sampleSize = 10; 
 Matrix gd::c1 (1e-3); 
 Matrix gd::c2 (0.9);
 Matrix gd::half (0.5);
 
+const double gd::augmentedDensity = 0.5; // samples per unit volume
+const double gd::penaltyTolerance = 1e-1;
+const double gd::minit = 0;
+const int gd::maxAugmentDepth = 10;
+double gd::r = 1;
+bool gd::AL = false;
+std::vector<gd::Penalty> gd::penalties;
+
 void gd::gd(Node* head, Variables* variables, const std::string &path) {
+    gd::AL = false;
+    gd::maximize = head->next[0]->next[0]->type == lt_maximize; // flip the gd evaluation
+    std::vector<Minima> minima;
+    std::string sol = path;
+    sol.replace(sol.rfind('.'), sol.back(), ".sol");
+
+    FILE* fptr = fopen(sol.c_str(), "w");
     fplot = fopen("./PLOT/plot.txt", "w");
     fsample = fopen("./PLOT/sample.txt", "w");
-    if(fplot == NULL) { printf("Debug: plot file not-found\n"); return; }
-    if(fsample == NULL) { printf("Debug: sample file not-found\n"); return; }
+    if(fptr == NULL) {printf("Error: file not found\n"); goto E; }
+    if(fplot == NULL) { printf("Debug: plot file not-found\n"); goto E; }
+    if(fsample == NULL) { printf("Debug: sample file not-found\n"); goto E; }
 
-    gd::minimize = head->next[0]->next[0]->type == lt_minimize;
+    fprintf(fplot, "Gradient Descent\n\n"); 
+    minima = gd::solve(head, variables);
+
+    /* no solution */
+    if(minima.empty()) {
+        printf("Warning: No solutions found\n");
+        goto E;
+    }
+
+    /* sort minimums */
+    std::sort(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
+        if(gd::maximize) return std::get<1>(a) > std::get<1>(b);
+        else             return std::get<1>(a) < std::get<1>(b);
+    });
+
+    fprintf(fptr, "Solution file for: %s\n\n", path.c_str());
+    for(size_t i = 0; i < minima.size(); i++) {
+        fprintf(fptr, "Optimum : %lf {Convergence : %d%%}\n", std::get<1>(minima[i]),
+                                        100 * std::get<2>(minima[i]) / gd::sampleSize);
+        for(int j = 0; j < variables->len; j++)
+            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
+        fprintf(fptr, "\n");
+    }
+    
+E:  fclose(fptr);
+    fclose(fplot);
+    fclose(fsample);
+}
+
+void gd::al(Node* head, Variables* variables, const std::string& path) {
+    gd::AL = true;
+    gd::maximize = head->next[0]->next[0]->type == lt_maximize; // flip the gd evaluation
+    Node *mode = head->next[0];
+    bool constraint = false;
+    std::vector<Minima> minima;
+    int depth = 0;
+    std::string sol = path;
+    sol.replace(sol.rfind('.'), sol.back(), ".sol");
+
+    FILE* fptr = fopen(sol.c_str(), "w");
+    fplot = fopen("./PLOT/plot.txt", "w");
+    fsample = fopen("./PLOT/sample.txt", "w");
+    if(fptr == NULL) {printf("Error: solution file cannot be created\n"); goto E; }
+    if(fplot == NULL) { printf("Debug: plot file not-found\n"); goto E; }
+    if(fsample == NULL) { printf("Debug: sample file not-found\n"); goto E; }
+
+    for(int i = 0; i < mode->length; i++) {
+        if(mode->next[i]->type == lt_constrain) {
+            constraint = true;
+            continue;
+        } if(constraint) penalties.push_back({mode->next[i], gd::minit});
+    }
+
+    while(depth < gd::maxAugmentDepth) {
+        fprintf(fplot, "Augmented Lagrangian r {%lf}\n\n", gd::r); 
+
+        minima = gd::solve(head, variables);
+        if(minima.empty()) continue;
+
+        double temp;
+        bool found = false;
+        for(size_t i = 0; i < minima.size(); i++) { // delete violating optima
+            bool valid = true;
+            for(const auto &p : penalties) {
+                gd::resolve(p.function, std::get<0>(minima[i]), temp);
+                if(gd::penaltyTolerance < fabs(temp)) valid = false;
+            } 
+            if(valid) found = true; 
+            else      minima.erase(minima.begin() + (i--));
+        } if(found) break;
+
+        gd::r *= 2;
+        depth++;
+    }
+
+    /* no solution */
+    if(minima.empty()) {
+        printf("Warning: No solutions found\n");
+        goto E;
+    }
+
+    /* sort minimums */
+    std::sort(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
+        if(gd::maximize) return std::get<1>(a) > std::get<1>(b);
+        else             return std::get<1>(a) < std::get<1>(b);
+    });
+
+    fprintf(fptr, "Solution file for: %s\n\n", path.c_str());
+    for(size_t i = 0; i < minima.size(); i++) {
+        fprintf(fptr, "Optimum : %lf {Convergence : %d%%}\n", std::get<1>(minima[i]),
+                                        100 * std::get<2>(minima[i]) / gd::sampleSize);
+        for(int j = 0; j < variables->len; j++)
+            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
+        fprintf(fptr, "\n");
+    }
+
+E:  fclose(fptr);
+    fclose(fplot);
+    fclose(fsample);
+}
+
+std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
+    gd::maximize = head->next[0]->next[0]->type == lt_maximize;
+    gd::AL = head->next[0]->type == nt_cnlp;
     Node* F = head->next[0]->next[1];
-
+    
+    std::vector<gd::Minima> minima;
+    std::vector<gd::Point> points;
     uniform Udist;
     std::vector<Bound> bounds(variables->len);
     std::vector<uniform> dists(variables->len, Udist);
@@ -37,6 +159,7 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
     double sampleVolume = 1;
     for(int i = 3; i < head->next[0]->length; i++) {
         Node* next = head->next[0]->next[i];
+        if(next->type == lt_constrain) break;
         Bound bound = {n_get_value(next->next[0]) * (next->next[0]->subtype==2 ? -1 : 1), 
                        n_get_value(next->next[2]) * (next->next[2]->subtype==2 ? -1 : 1)};
         sampleVolume *= abs(bound.max - bound.min);
@@ -50,11 +173,10 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
             printf("Error: %s is unbounded\n", variables->arr[i]);
             unbounded = true;
         }
-    } if(unbounded) return;
+    } if(unbounded) return minima;
 
-    int sampleSize = sampleVolume * gd::sampleDensity;
-    std::vector<std::tuple<Matrix, double, int>> minima;
-    std::vector<gd::Point> points = gd::mesh(F, variables, dists, sampleSize);
+    gd::sampleSize = sampleVolume * (gd::AL ? gd::augmentedDensity : gd::sampleDensity);
+    points = gd::mesh(F, variables, dists, gd::sampleSize);
     minima.reserve(sampleSize);
 
     for(auto &point : points) {
@@ -72,37 +194,7 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
         minima.emplace_back(std::make_tuple(point.xk, minimum, 1));
     }
 
-    /* no solution */
-    if(minima.empty()) {
-        printf("Warning: No solutions found\n");
-        return;
-    }
-
-    /* sort minimums */
-    std::sort(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
-        return std::get<1>(a) < std::get<1>(b);
-    });
-
-    std::string sol = path;
-    sol.replace(sol.rfind('.'), sol.back(), ".sol");
-    FILE* fptr = fopen(sol.c_str(), "w");
-
-    if(fptr == NULL) {
-        printf("Error: unable to open %s\n", path.c_str());
-        return;
-    }
-    fprintf(fptr, "Solution file for: %s\n\n", path.c_str());
-    for(size_t i = 0; i < minima.size(); i++) {
-        fprintf(fptr, "Optimum : %lf {Convergence : %zu%%}\n", std::get<1>(minima[i]),
-                                        100 * std::get<2>(minima[i]) / points.size());
-        for(int j = 0; j < variables->len; j++)
-            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
-        fprintf(fptr, "\n");
-    }
-    fclose(fptr);
-
-    fclose(fplot);
-    fclose(fsample);
+    return minima;
 }
 
 int gd::BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bounds) {
@@ -290,9 +382,26 @@ E:  return -1;
 }
 
 int gd::evaluate(Node* head, const Matrix &replace, double &value) {
+    double lagrange = 0, augment = 0, a;
     if(replace.col != 1) goto E;
     if(gd::additive(head, replace, value) == -1) goto E;
-    if(gd::minimize) value = -value;
+    if(gd::AL) {
+        for(const auto &p : gd::penalties) {
+            if(gd::additive(p.function, replace, a) == -1) goto E;
+            lagrange += p.multiplier * a;
+            augment  += gd::r * (a * a);
+        }
+        value += lagrange + augment;
+        if(!isfinite(value)) { flag = gd_overflow; goto E; }
+    }
+    if(gd::maximize) value = -value;
+    return 0;
+E:  return -1;
+}
+int gd::resolve(Node* head, const Matrix& replace, double &value) {
+    if(replace.col != 1) goto E;
+    if(gd::additive(head, replace, value) == -1) goto E;
+    if(gd::maximize) value = -value;
     return 0;
 E:  return -1;
 }

@@ -3,6 +3,7 @@
 FILE* s_syntax_depth_map;
 int s_minus_flag;
 int s_divide_flag;
+int s_variable_flag;
 
 int s_syn(Node** head, Token* token) {
     /* open depth map */
@@ -100,7 +101,7 @@ Node* s_cnlp(Token** token, int depth) {
     if(!n_push(node, s_compare(token, lt_bound))) goto f;
     while(n_push(node, s_variable_bound(token, depth+1)));
     if(!n_push(node, s_compare(token, lt_constrain))) goto f;
-    while(n_push(node, s_nonlinear_constraint(token, depth+1)));
+    while(n_push(node, s_equality_constraint(token, depth+1)));
     goto t;
 f : *token = ptoken;
     return n_free(node);
@@ -451,20 +452,38 @@ Node* s_variable_bound(Token** token, int depth) {
     PRINTMAP(depth, "variable bound", token)
     Node* node = n_construct(nt_variable_bound, 0);
     Token* ptoken = *token;
-    s_minus_flag = 0; s_sign(token, depth+1);
+    int pflag = s_variable_flag;
+    s_variable_flag = 0; s_sign(token, depth+1);
     if(!n_push(node, s_real(token, depth+1))) goto f;
-    node->next[0]->subtype = s_minus_flag ? 2 : 1;
+    node->next[0]->subtype = s_variable_flag ? 2 : 1;
     if(!s_compare(token, lt_less)) goto f;
     if(!n_push(node, s_variable(token, depth+1))) goto f;
     if(!s_compare(token, lt_less)) goto f;
-    s_minus_flag = 0; s_sign(token, depth+1);
+    s_variable_flag = 0; s_sign(token, depth+1);
     if(!n_push(node, s_real(token, depth+1))) goto f;
-    node->next[2]->subtype = s_minus_flag ? 2 : 1;
+    node->next[2]->subtype = s_variable_flag ? 2 : 1;
+    if(!s_compare(token, lt_semicolon)) goto f;
+    goto t;
+f : *token = ptoken; s_variable_flag = pflag;
+    return n_free(node);
+t : return node; 
+}
+Node* s_equality_constraint(Token** token, int depth) {
+    PRINTMAP(depth, "equality constraint", token)
+    Node* node = n_construct(nt_equality_constraint, 0);
+    Token* ptoken = *token;
+    if(!n_push(node, s_nonlinear_expression(token, depth+1))) goto c2;
+    if(!s_compare(token, lt_equal)) goto c2;
+    if(!s_compare(token, ct_zero)) goto c2;
+    if(!s_compare(token, lt_semicolon)) goto c2;
+    goto t;
+c2: *token = ptoken; n_reset(node);
+    if(!n_push(node, s_nonlinear_expression(token, depth+1))) goto f;
     if(!s_compare(token, lt_semicolon)) goto f;
     goto t;
 f : *token = ptoken;
     return n_free(node);
-t : return node; 
+t : return node;
 }
 Node* s_real(Token** token, int depth) {
     PRINTMAP(depth, "real number", token)
@@ -530,6 +549,7 @@ Node* s_sign(Token** token, int depth) {
 c2: *token = ptoken; n_reset(node);
     if(!n_push(node, s_compare(token, lt_minus))) goto f; 
     s_minus_flag = !s_minus_flag;
+    s_variable_flag = !s_variable_flag;
     goto t;
 f : *token = ptoken;
     return n_free(node);
