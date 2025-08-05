@@ -1,5 +1,5 @@
 Minimize 
-   sin x + cos y;
+   ln(x)+(1-y)^2 + (2-x)^2;
 Bound
-   0 < x < 10;
-   0 < y < 10;
+   0 < x < 5;
+   0 < y < 5;

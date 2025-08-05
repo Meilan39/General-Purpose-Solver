@@ -12,7 +12,7 @@
 
 <cnlp> ::= <objective> <nonlinear_expression> ;
            Bound {<variable_bound>}*
-           Constrain {<equality_constraint>}*
+           Constrain {<nonlinear_constraint>}*
 
 /* ---------------------- linear ----------------------- */
 
@@ -69,14 +69,12 @@
 
 <linear_constraint> ::= <linear_expression> <comparison> <linear_expression> ;
 
-<nonlinear_constraint> ::= <nonlinear_expression> <comparsion> <nonlinear_expression> ;
-
+<nonlinear_constraint> ::= <nonlinear_expression> = 0 ;
+                         | <nonlinear_expression> ;
+ 
 <variable_constraint> ::= <variable> ;
 
 <variable_bound> ::= {<sign>}? <real_number> < <variable> < {<sign>}? <real_number> ;
-
-<equality_constraint> ::= <nonlinear_expression> = 0 ;
-                        | <nonlinear_expression> ;
 
 <real_number> ::= <rational> | <irrational>
 

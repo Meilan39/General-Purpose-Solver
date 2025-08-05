@@ -22,7 +22,7 @@ Matrix gd::c2 (0.9);
 Matrix gd::half (0.5);
 
 const double gd::augmentedDensity = 0.5; // samples per unit volume
-const double gd::penaltyTolerance = 1e-1;
+const double gd::penaltyTolerance = 1e-2;
 const double gd::minit = 0;
 const int gd::maxAugmentDepth = 10;
 double gd::r = 1;
@@ -63,7 +63,7 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
         fprintf(fptr, "Optimum : %lf {Convergence : %d%%}\n", std::get<1>(minima[i]),
                                         100 * std::get<2>(minima[i]) / gd::sampleSize);
         for(int j = 0; j < variables->len; j++)
-            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
+            fprintf(fptr, "\t%-3s = %7.4f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0)); // 7.2f
         fprintf(fptr, "\n");
     }
     
@@ -93,27 +93,34 @@ void gd::al(Node* head, Variables* variables, const std::string& path) {
         if(mode->next[i]->type == lt_constrain) {
             constraint = true;
             continue;
-        } if(constraint) penalties.push_back({mode->next[i], gd::minit});
+        } if(constraint) gd::penalties.push_back({mode->next[i], gd::minit});
     }
 
     while(depth < gd::maxAugmentDepth) {
         fprintf(fplot, "Augmented Lagrangian r {%lf}\n\n", gd::r); 
 
         minima = gd::solve(head, variables);
-        if(minima.empty()) continue;
+        auto minimum = std::min_element(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
+            if(gd::maximize) return std::get<1>(a) > std::get<1>(b);
+            else             return std::get<1>(a) < std::get<1>(b);
+        });
 
         double temp;
         bool found = false;
         for(size_t i = 0; i < minima.size(); i++) { // delete violating optima
             bool valid = true;
-            for(const auto &p : penalties) {
+            for(const auto &p : gd::penalties) {
                 gd::resolve(p.function, std::get<0>(minima[i]), temp);
                 if(gd::penaltyTolerance < fabs(temp)) valid = false;
             } 
-            if(valid) found = true; 
+            if(valid) found = true;
             else      minima.erase(minima.begin() + (i--));
         } if(found) break;
 
+        for(auto &p : gd::penalties) {
+            if(minimum == minima.end()) break;
+            p.multiplier = p.multiplier + gd::r * std::get<1>(*minimum) / 2; // r_k = r_{k+1}/2
+        }
         gd::r *= 2;
         depth++;
     }
@@ -135,7 +142,7 @@ void gd::al(Node* head, Variables* variables, const std::string& path) {
         fprintf(fptr, "Optimum : %lf {Convergence : %d%%}\n", std::get<1>(minima[i]),
                                         100 * std::get<2>(minima[i]) / gd::sampleSize);
         for(int j = 0; j < variables->len; j++)
-            fprintf(fptr, "\t%-3s = %7.2f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0));
+            fprintf(fptr, "\t%-3s = %7.4f;\n", variables->arr[j], std::get<0>(minima[i]).at(j,0)); // 7.2f
         fprintf(fptr, "\n");
     }
 
@@ -175,10 +182,13 @@ std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
         }
     } if(unbounded) return minima;
 
+    /* sample points */
     gd::sampleSize = sampleVolume * (gd::AL ? gd::augmentedDensity : gd::sampleDensity);
     points = gd::mesh(F, variables, dists, gd::sampleSize);
-    minima.reserve(sampleSize);
+    minima.reserve(sampleSize); // note: this is definitely not necessary
+    gd::sampleSize = points.size(); // 8/4/25
 
+    /* call BFGS on every point */
     for(auto &point : points) {
         double minimum;
         bool cluster = false;
@@ -190,7 +200,12 @@ std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
             break;
         }
         if(cluster) continue;
+
+        bool temp = gd::AL; // really not good
+        gd::AL = false;
         gd::evaluate(F, point.xk, minimum);
+        gd::AL = temp;
+
         minima.emplace_back(std::make_tuple(point.xk, minimum, 1));
     }
 
@@ -211,7 +226,7 @@ int gd::BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bo
 
     while(cmp(gk.norm(),">",gd::gradTolerance)) {
         if(depth > gd::maxDepth) goto E;
-        fprintf(fplot, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
+        // fprintf(fplot, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
         /* step direction */
         // pk = -gk;
         pk = -Hk * gk;
@@ -274,7 +289,7 @@ std::vector<gd::Point> gd::mesh(Node* F, Variables* variables, std::vector<unifo
         } 
         if(cluster) continue;
 
-        fprintf(fsample, "%lf %lf\n\n", point.xk.at(0,0), point.xk.at(1,0));
+        // fprintf(fsample, "%lf %lf\n\n", point.xk.at(0,0), point.xk.at(1,0));
         points.emplace_back(point);
     }
 
@@ -388,7 +403,7 @@ int gd::evaluate(Node* head, const Matrix &replace, double &value) {
     if(gd::AL) {
         for(const auto &p : gd::penalties) {
             if(gd::additive(p.function, replace, a) == -1) goto E;
-            lagrange += p.multiplier * a;
+            // lagrange += p.multiplier * a;
             augment  += gd::r * (a * a);
         }
         value += lagrange + augment;

@@ -1,0 +1,10 @@
+Maximize
+    19b1 + 17b2 + 30b3 + 13b4;
+Constrain
+    4b1 + 2b2 + 8b3 + 3b4 <= 8;
+    b1 <= 1;
+    b2 <= 1;
+    b3 <= 1;
+    b4 <= 1;
+Integer
+    b1; b2; b3; b4;
