@@ -7,12 +7,12 @@ int s_variable_flag;
 
 int s_syn(Node** head, Token* token) {
     /* open depth map */
-    s_syntax_depth_map = fopen("./meta/depthmap.txt", "w");
-    if(!s_syntax_depth_map) { printf("unable to open depthmap\n"); return -1; }
+    // s_syntax_depth_map = fopen("./meta/depthmap.txt", "w");
+    // if(!s_syntax_depth_map) { printf("unable to open depthmap\n"); return -1; }
     /* parse */
     *head = s_file(&token, 0);
     /* close depth map */
-    fclose(s_syntax_depth_map);
+    // fclose(s_syntax_depth_map);
     /* print abstract syntax tree */
     if( (*head)==NULL ) return -1;
     if( token!=NULL ) return -1;

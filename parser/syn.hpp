@@ -12,7 +12,6 @@ extern int s_minus_flag;
 extern int s_divide_flag;
 extern int s_variable_flag;
 
-#define DEPTHMAP 1
 #ifdef DEPTHMAP
     #define PRINTMAP(depth, name, token)                                        \
         if(depth>0) {                                                           \
@@ -25,7 +24,7 @@ extern int s_variable_flag;
         //     fprintf(s_syntax_depth_map, "%s {%Lf}\n", name, (*token)->value); 
         // else                                                                  
 #else
-    #define PRINTMAP(fmt, ...)
+    #define PRINTMAP(depth, name, token) if(depth>0); // use depth to silence warning
 #endif
 
 int s_syn(Node** head, Token* token);

@@ -37,13 +37,13 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
     sol.replace(sol.rfind('.'), sol.back(), ".sol");
 
     FILE* fptr = fopen(sol.c_str(), "w");
-    fplot = fopen("./PLOT/plot.txt", "w");
-    fsample = fopen("./PLOT/sample.txt", "w");
+    // fplot = fopen("./PLOT/plot.txt", "w");
+    // fsample = fopen("./PLOT/sample.txt", "w");
     if(fptr == NULL) {printf("Error: file not found\n"); goto E; }
-    if(fplot == NULL) { printf("Debug: plot file not-found\n"); goto E; }
-    if(fsample == NULL) { printf("Debug: sample file not-found\n"); goto E; }
+    // if(fplot == NULL) { printf("Debug: plot file not-found\n"); goto E; }
+    // if(fsample == NULL) { printf("Debug: sample file not-found\n"); goto E; }
 
-    fprintf(fplot, "Gradient Descent\n\n"); 
+    // fprintf(fplot, "Gradient Descent\n\n"); 
     minima = gd::solve(head, variables);
 
     /* no solution */
@@ -68,8 +68,8 @@ void gd::gd(Node* head, Variables* variables, const std::string &path) {
     }
     
 E:  fclose(fptr);
-    fclose(fplot);
-    fclose(fsample);
+    // fclose(fplot);
+    // fclose(fsample);
 }
 
 void gd::al(Node* head, Variables* variables, const std::string& path) {
@@ -83,11 +83,11 @@ void gd::al(Node* head, Variables* variables, const std::string& path) {
     sol.replace(sol.rfind('.'), sol.back(), ".sol");
 
     FILE* fptr = fopen(sol.c_str(), "w");
-    fplot = fopen("./PLOT/plot.txt", "w");
-    fsample = fopen("./PLOT/sample.txt", "w");
+    // fplot = fopen("./PLOT/plot.txt", "w");
+    // fsample = fopen("./PLOT/sample.txt", "w");
     if(fptr == NULL) {printf("Error: solution file cannot be created\n"); goto E; }
-    if(fplot == NULL) { printf("Debug: plot file not-found\n"); goto E; }
-    if(fsample == NULL) { printf("Debug: sample file not-found\n"); goto E; }
+    // if(fplot == NULL) { printf("Debug: plot file not-found\n"); goto E; }
+    // if(fsample == NULL) { printf("Debug: sample file not-found\n"); goto E; }
 
     for(int i = 0; i < mode->length; i++) {
         if(mode->next[i]->type == lt_constrain) {
@@ -97,7 +97,7 @@ void gd::al(Node* head, Variables* variables, const std::string& path) {
     }
 
     while(depth < gd::maxAugmentDepth) {
-        fprintf(fplot, "Augmented Lagrangian r {%lf}\n\n", gd::r); 
+        // fprintf(fplot, "Augmented Lagrangian r {%lf}\n\n", gd::r); 
 
         minima = gd::solve(head, variables);
         auto minimum = std::min_element(minima.begin(), minima.end(), [](auto const &a, auto const &b) {
@@ -147,8 +147,8 @@ void gd::al(Node* head, Variables* variables, const std::string& path) {
     }
 
 E:  fclose(fptr);
-    fclose(fplot);
-    fclose(fsample);
+    // fclose(fplot);
+    // fclose(fsample);
 }
 
 std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
@@ -185,7 +185,6 @@ std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
     /* sample points */
     gd::sampleSize = sampleVolume * (gd::AL ? gd::augmentedDensity : gd::sampleDensity);
     points = gd::mesh(F, variables, dists, gd::sampleSize);
-    minima.reserve(sampleSize); // note: this is definitely not necessary
     gd::sampleSize = points.size(); // 8/4/25
 
     /* call BFGS on every point */
@@ -194,7 +193,7 @@ std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
         bool cluster = false;
         if(BFGS(F, variables, point, bounds) == -1) continue;
         for(auto &m : minima) {
-            if(cmp((std::get<0>(m) - point.xk).norm(),">",gd::overlapThreshold)) continue;
+            if((std::get<0>(m) - point.xk).norm() > gd::overlapThreshold) continue;
             cluster = true;
             std::get<2>(m)++;
             break;
@@ -206,7 +205,7 @@ std::vector<gd::Minima> gd::solve(Node* head, Variables* variables) {
         gd::evaluate(F, point.xk, minimum);
         gd::AL = temp;
 
-        minima.emplace_back(std::make_tuple(point.xk, minimum, 1));
+        minima.push_back(std::make_tuple(point.xk, minimum, 1));
     }
 
     return minima;
@@ -224,7 +223,7 @@ int gd::BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bo
     Matrix skyk(0);
     Matrix ak(0);
 
-    while(cmp(gk.norm(),">",gd::gradTolerance)) {
+    while(gk.norm() > gd::gradTolerance) {
         if(depth > gd::maxDepth) goto E;
         // fprintf(fplot, "%lf %lf\n", xk.at(0,0), xk.at(1,0));
         /* step direction */
@@ -249,9 +248,9 @@ int gd::BFGS(Node* F, Variables* variables, Point &point, std::vector<Bound> &bo
         depth++;
     }
 
-    fprintf(fplot, "\n");
+    // fprintf(fplot, "\n");
     return 0;
-E:  fprintf(fplot, "\n");
+E:  // fprintf(fplot, "\n");
     return -1;
 }
 
@@ -274,7 +273,7 @@ std::vector<gd::Point> gd::mesh(Node* F, Variables* variables, std::vector<unifo
         point.gnorm = point.gk.norm();
 
         /* discard if gradient is almost flat */
-        if(cmp(point.gnorm,"<",gd::sampleThreshold)) continue; 
+        if(point.gnorm < gd::sampleThreshold) continue; 
 
         /* cluster if proximal */
         Matrix t (variables->len, 1, false);
@@ -298,7 +297,7 @@ std::vector<gd::Point> gd::mesh(Node* F, Variables* variables, std::vector<unifo
 
 bool gd::outbound(const std::vector<Bound> &bounds, const Matrix &xk) {
     for(size_t i = 0; i < bounds.size(); i++) {
-        if(cmp(xk.at(i, 0),"<",bounds[i].min) || cmp(bounds[i].max,"<",xk.at(i, 0)))
+        if(xk.at(i, 0) < bounds[i].min || bounds[i].max < xk.at(i, 0))
             return true;
     } return false;
 }

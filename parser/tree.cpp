@@ -3,9 +3,9 @@
 FILE* s_abstract_syntax_tree;
 
 void n_simplify(Node* head) {
-    n_print(head, "./meta/pt.txt"); // print parse tree
+    // n_print(head, "./meta/pt.txt"); // print parse tree
     n_compress(head);
-    n_print(head, "./meta/ast.txt"); // print abstract syntax tree
+    // n_print(head, "./meta/ast.txt"); // print abstract syntax tree
 }
 
 void n_compress(Node* head) {

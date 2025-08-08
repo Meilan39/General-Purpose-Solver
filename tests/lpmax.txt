@@ -1,6 +1,0 @@
-Maximize
-    120 * x1 + 170 * x2;
-Constrain
-    x1 <= 3;
-    x2 <= 4;
-    x1 + x2 <= 4.930;

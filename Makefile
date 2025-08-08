@@ -10,7 +10,7 @@ BUILD_DIR := build
 TARGET := gpsolve
 
 # Debug vs Release builds
-DEBUG ?= 1
+DEBUG ?= 0
 ifeq ($(DEBUG), 1)
     CXXFLAGS += -g -O0
     BUILD_DIR := $(BUILD_DIR)/debug
