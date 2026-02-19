@@ -1,7 +1,0 @@
-Minimize
-    sin(x)+cos(y);
-Bound
-    -5 < x < 5;
-    -5 < y < 5;
-Constrain
-    x^2 + y^2 - 4 = 0;
