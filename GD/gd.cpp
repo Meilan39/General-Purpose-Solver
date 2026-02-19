@@ -403,7 +403,7 @@ int gd::evaluate(Node* head, const Matrix &replace, double &value) {
         for(const auto &p : gd::penalties) {
             if(gd::additive(p.function, replace, a) == -1) goto E;
             // lagrange += p.multiplier * a;
-            augment  += gd::r * (a * a);
+            augment += gd::r * (a * a);
         }
         value += lagrange + augment;
         if(!isfinite(value)) { flag = gd_overflow; goto E; }
