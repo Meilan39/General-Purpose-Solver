@@ -58,7 +58,7 @@ BNF規定：
 <irrational> ::= e | pi
 <comparison> ::=  = | <= | >= | > | <
 ```
-例：./tests/lp.txt
+例：./examples/lp.txt
 ```
 Minimize
     6x1 + 3x2;
@@ -93,7 +93,7 @@ BNF規定：
 <irrational> ::= e | pi
 <comparison> ::=  = | <= | >= | > | <
 ```
-例：./tests/ilp.txt
+例：./examples/ilp.txt
 ```
 Minimize
     6x1 + 3x2;
@@ -156,7 +156,7 @@ BNF規定：
 
 <comparison> ::=  = | <= | >= | > | <
 ```
-例：./tests/unlp.txt
+例：./examples/unlp.txt
 ```
 Minimize
     (1.5 - x + x*y)^2 + (2.25 - x + x*y^2)^2 + (2.625 - x + x*y^3)^2;
@@ -218,7 +218,7 @@ BNF規定：
 
 <comparison> ::=  = | <= | >= | > | <
 ```
-例：./tests/cnlp.txt
+例：./examples/cnlp.txt
 ```
 Minimize
     sin(x) + cos(y);
