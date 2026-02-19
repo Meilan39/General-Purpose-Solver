@@ -14,6 +14,9 @@ int main(int argc, char *argv[]) {
     // open file
     FILE *fptr = fopen(argv[1], "r");
     if(fptr == NULL) { printf("Error: unable to open file\n"); return 1; } 
+    // extract path
+    std::string path(argv[1]);
+    path = path.substr(0, path.find_last_of('.'));
     // construct tokens and objects
     Token* tokens = t_construct();
     Node* head = NULL;
@@ -22,6 +25,7 @@ int main(int argc, char *argv[]) {
     if(s_syn(&head, tokens->next)) {printf("Error: syntax error\n"); goto E;}
     n_simplify(head);
     // solve
+    printf("Solving...\n");
     switch(head->next[0]->type) {
         case nt_lp: simplex::simplex(head, tokens->variables, argv[1]); break;
         case nt_ilp: bnb::bnb(head, tokens->variables, argv[1]); break;
@@ -29,6 +33,7 @@ int main(int argc, char *argv[]) {
         case nt_cnlp: gd::al(head, tokens->variables, argv[1]); break;
         default: break;
     }
+    printf("Finished. Output to %s.sol\n", path.c_str());
 E:  // close file
     fclose(fptr);
     t_destruct(tokens);
